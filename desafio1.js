@@ -1,25 +1,49 @@
+const fs = require('fs');
 class ProductManager {
     #id = 0;
-    constructor() {
-        this.products = [];
+    constructor(path) {
+        this.path = path;
+        if (!fs.existsSync(this.path)) {
+            fs.writeFileSync(
+                this.path,
+                JSON.stringify([]));
+        }
     }
 
-    getProducts() {
-        return this.products;
+    async getProducts() {
+        try {
+            const actualProducts = await fs.promises.readFile(this.path, 'utf-8');
+            return JSON.parse(actualProducts);
+        }
+        catch (err) {
+            return console.log("No se pudo obtener los productos");
+        }
     }
 
-    addProduct(title, description, price, thumbnail, code, stock) {
-        const product = { title, description, price, thumbnail, code, stock };
+    async addProduct(title, description, price, thumbnail, code, stock) {
 
-        product.id = this.#getID();
+        try {
+            const actualProducts = await this.getProducts();
+            const product = { title, description, price, thumbnail, code, stock };
 
-        const find = this.products.find((product)=>product.code===code)
+            product.id = this.#getID();
 
-         if (find) {
-            console.log("El producto ya existe");
-            return;
-        } 
-        this.products.push(product);
+            const find = await actualProducts.find((product) => product.code === code);
+
+            if (find) {
+                console.log("El producto ya existe");
+                return;
+            }
+            actualProducts.push(product);
+            await fs.promises.writeFile(
+                this.path,
+                JSON.stringify(actualProducts)
+            );
+        }
+
+        catch (err) {
+            console.log("No se pudo agregar el producto");
+        }
     }
 
     #getID() {
@@ -27,22 +51,72 @@ class ProductManager {
         return this.#id;
     }
 
-    getProductById(productId) {
-        const find = this.products.find((product)=>product.id===productId)
-        if(find){
+    async getProductById(productId) {
+        const actualProducts = await this.getProducts();
+        const find = actualProducts.find((product) => product.id === productId);
+        if (find) {
             return find;
-        }else{
+        } else {
             console.log("Not found");
         }
     }
+
+    async updateProduct(productId, value) {
+        try {
+            const actualProducts = await this.getProducts();
+            const find = await actualProducts.find((product) => product.id === productId);
+            if (find) {
+                find.stock = value;
+            } else {
+                return console.log("Not found");
+            }
+            await fs.promises.writeFile(
+                this.path,
+                JSON.stringify(actualProducts)
+            );
+        }
+        catch (err) {
+            console.log("No se pudo modificar el producto");
+        }
+
+    }
+
+    async deleteProduct(productId) {
+        try {
+            const actualProducts = await this.getProducts();
+            const newProducts = actualProducts.filter((product) => product.id != productId);
+            await fs.promises.writeFile(
+                this.path,
+                JSON.stringify(newProducts)
+            );
+        }
+        catch (err) {
+            console.log("No se pudo borrar el producto");
+        }
+
+    }
 }
 
-const pm = new ProductManager();
-console.log(pm.getProducts())
-pm.addProduct("monitor", "asd", 123, "asd", 455);
-pm.addProduct("monr", "asd", 124, "asd", 4556, 1);
+const pm = new ProductManager('./products.json');
 
-/* console.log(pm.products[0])
-console.log(pm.products[1]) */
 
-console.log(pm.getProductById(3))
+const test = async () => {
+
+    try {
+
+        await pm.addProduct("monr", "asd", 124, "asd", 4556, 1);
+
+        await pm.addProduct("monitor", "asd", 123, "asd", 455, 4);
+
+
+        console.log(await pm.getProducts());
+        console.log(await pm.getProductById(3));
+        console.log(await pm.deleteProduct(1));
+        console.log(await pm.getProducts());
+        console.log(await pm.updateProduct(2, 999));
+        console.log(await pm.getProducts());
+    } catch (err) {
+        console.log("Algo salio mal");
+    }
+};
+test();
