@@ -10,36 +10,38 @@ app.listen(8080, () => {
     console.log("Estoy escuchando");
 });
 
-app.get("/products", async (req, res) => {
+app.get("/products/", async (req, res) => {
     try {
         let products = await productManager.getProducts();
-        res.send(products);
+        let limit = parseInt(req.query.limit);
+        if (!limit) {
+            return res.send(products);
+        } else {
+            let shortListProducts = products.slice(0, limit)
+            return res.send(shortListProducts);
+        }
+
     } catch (err) {
         res.send(err);
     }
 });
 
-app.get("/products/:limit", async (req, res) => {
-    
-    try {
-         let products = await productManager.getProducts()
-         let shortListProducts = products.filter((prod)=>{
-            return prod.id <= req.params.limit;
-        }) 
-        res.send(shortListProducts);
-    } catch (err) {
-        res.send(err);
-    }
-});
 
-app.get("/products/id/:pid", async (req, res) => {
-    
+app.get("/products/:pid", async (req, res) => {
+
     try {
-         let products = await productManager.getProducts()
-         let idProduct = products.find((prod)=>{
+        let products = await productManager.getProducts()
+        let idProduct = products.find((prod) => {
             return prod.id == req.params.pid;
-        }) 
-        res.send(idProduct);
+
+        })
+
+        if (idProduct) {
+            return res.send(idProduct);
+        } else {
+            return res.send(console.log("El producto no se encontro"));
+        }
+
     } catch (err) {
         res.send(err);
     }

@@ -98,7 +98,7 @@ export default class ProductManager {
     }
 }
 
-/*    const pm = new ProductManager('./products.json');
+/* const pm = new ProductManager('./products.json');
 
 
 const test = async () => {
@@ -111,16 +111,20 @@ const test = async () => {
         await pm.addProduct("mocvn", "c", 8, "e", 458, 8);
         await pm.addProduct("f", "aeeeee", 34, "b", 4, 5);
         await pm.addProduct("wvbbnvbnvbnvbn", "aqqqq", 100000, "vb", 45, 2);
+        await pm.addProduct("f", "aeeeee", 34, "b", 5, 6);
+        await pm.addProduct("ewrvj", "aqfgq", 10230, "vt", 49, 8);
+        await pm.addProduct("f", "aereee", 33, "q", 8, 7);
+        await pm.addProduct("j", "aqwq", 1004500, "w", 46, 9);
 
 
-          console.log(await pm.getProducts());
+         console.log(await pm.getProducts());
         console.log(await pm.getProductById(3));
         console.log(await pm.deleteProduct(1));
         console.log(await pm.getProducts());
         console.log(await pm.updateProduct(2, 999));
-        console.log(await pm.getProducts());  
+        console.log(await pm.getProducts()); 
     } catch (err) {
         console.log("Algo salio mal");
     }
 };
-test();   */
+test();     */
