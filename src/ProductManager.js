@@ -1,7 +1,7 @@
 import { existsSync, writeFileSync, promises } from 'fs';
 
 export default class ProductManager {
-    #id = 0;
+
     constructor(path) {
         this.path = path;
         if (!existsSync(this.path)) {
@@ -21,40 +21,25 @@ export default class ProductManager {
         }
     }
 
-    async addProduct(title, description, price, thumbnail, code, stock) {
-
+    async addProduct(product) {
         try {
             const actualProducts = await this.getProducts();
-            const product = { title, description, price, thumbnail, code, stock };
+            product.id = actualProducts.length + 1;
 
-            product.id = this.#getID();
-
-            const find = await actualProducts.find((product) => product.code === code);
-
-            if (find) {
-                console.log("El producto ya existe");
-                return;
-            }
             actualProducts.push(product);
             await promises.writeFile(
                 this.path,
                 JSON.stringify(actualProducts)
             );
         }
-
         catch (err) {
             console.log("No se pudo agregar el producto");
         }
     }
 
-    #getID() {
-        this.#id++;
-        return this.#id;
-    }
-
     async getProductById(productId) {
         const actualProducts = await this.getProducts();
-        const find = actualProducts.find((product) => product.id === productId);
+        const find = actualProducts.find((product) => product.id == productId);
         if (find) {
             return find;
         } else {
@@ -62,15 +47,13 @@ export default class ProductManager {
         }
     }
 
-    async updateProduct(productId, value) {
+    async updateProduct(productId, product) {
         try {
             const actualProducts = await this.getProducts();
-            const find = await actualProducts.find((product) => product.id === productId);
-            if (find) {
-                find.stock = value;
-            } else {
-                return console.log("Not found");
-            }
+            const index = actualProducts.findIndex((prod) => prod.id == productId);
+            product.id = productId;
+            actualProducts[index] = product;
+
             await promises.writeFile(
                 this.path,
                 JSON.stringify(actualProducts)

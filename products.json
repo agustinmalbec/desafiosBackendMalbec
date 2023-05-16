@@ -1,1 +1,20 @@
-[{"title":"monitor","description":"asd","price":123,"thumbnail":"asd","code":44,"stock":999,"id":2},{"title":"fdgfh","description":"ght","price":5,"thumbnail":"a","code":43225,"stock":99,"id":3},{"title":"mocvn","description":"c","price":8,"thumbnail":"e","code":458,"stock":8,"id":4},{"title":"f","description":"aeeeee","price":34,"thumbnail":"b","code":4,"stock":5,"id":5},{"title":"wvbbnvbnvbnvbn","description":"aqqqq","price":100000,"thumbnail":"vb","code":45,"stock":2,"id":6},{"title":"f","description":"aeeeee","price":34,"thumbnail":"b","code":5,"stock":6,"id":7},{"title":"ewrvj","description":"aqfgq","price":10230,"thumbnail":"vt","code":49,"stock":8,"id":8},{"title":"f","description":"aereee","price":33,"thumbnail":"q","code":8,"stock":7,"id":9},{"title":"j","description":"aqwq","price":1004500,"thumbnail":"w","code":46,"stock":9,"id":10},{"title":"monr","description":"asd","price":124,"thumbnail":"asd","code":4556,"stock":1,"id":1}]
+[
+    {
+        "title": "prueba",
+        "description": "b",
+        "price": 3,
+        "thumbnail": "af",
+        "code": 1,
+        "stock": 9344,
+        "id": 1
+    },
+    {
+        "title": "pruebaasd",
+        "description": "b",
+        "price": 3,
+        "thumbnail": "af",
+        "code": 2,
+        "stock": 9344,
+        "id": 2
+    }
+]

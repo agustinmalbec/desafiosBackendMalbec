@@ -1,20 +1,19 @@
-import { Router } from "express";
-import ProductManager from "../ProductManager";
+import { Router } from 'express';
+import ProductManager from '../ProductManager.js';
 
-const productManager = new ProductManager("./products.json");
+const productManager = new ProductManager('./products.json');
 
-const products = [];
 const productsRouter = Router();
 
-productsRouter.get("/", async (req, res) => {
+productsRouter.get('/', async (req, res) => {
     try {
         let products = await productManager.getProducts();
         let limit = parseInt(req.query.limit);
         if (!limit) {
-            return res.send(products);
+            res.send(products);
         } else {
             let shortListProducts = products.slice(0, limit)
-            return res.send(shortListProducts);
+            res.send(shortListProducts);
         }
 
     } catch (err) {
@@ -22,20 +21,19 @@ productsRouter.get("/", async (req, res) => {
     }
 });
 
-productsRouter.post("/", async (req, res) => {
+productsRouter.post('/', async (req, res) => {
     try {
-        let { product } = req.body;
+        let product = req.body;
         productManager.addProduct(product);
-        res.status(201).send({ agregado: product });
+        res.status(201).send(product);
     } catch (err) {
         res.status(400).send({ err });
     }
 });
 
-productsRouter.get("/:pid", async (req, res) => {
-
+productsRouter.get('/:pid', async (req, res) => {
     try {
-        let products = await productManager.getProducts()
+        let products = await productManager.getProducts();
         let idProduct = products.find((prod) => {
             return prod.id == req.params.pid;
         })
@@ -43,7 +41,7 @@ productsRouter.get("/:pid", async (req, res) => {
         if (idProduct) {
             return res.send(idProduct);
         } else {
-            return res.send(console.log("El producto no se encontro"));
+            return res.send(console.log('El producto no se encontro'));
         }
 
     } catch (err) {
@@ -51,11 +49,17 @@ productsRouter.get("/:pid", async (req, res) => {
     }
 });
 
-productsRouter.put("/:pid", (req, res) => {
-
+productsRouter.put('/:pid', async (req, res) => {
+    try {
+        let product = req.body;
+        await productManager.updateProduct(req.params.pid, product);
+        return res.send(product);
+    } catch (err) {
+        res.status(400).send({ err });
+    }
 });
 
-productsRouter.delete("/:pid", async (req, res) => {
+productsRouter.delete('/:pid', async (req, res) => {
     const id = req.params.pid;
     try {
         productManager.deleteProduct(id);

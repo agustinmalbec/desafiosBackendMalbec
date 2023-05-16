@@ -12,5 +12,5 @@ app.listen(8080, () => {
     console.log("Estoy escuchando");
 });
 
-app.use("/api/pruducts/", productsRouter);
+app.use("/api/products/", productsRouter);
 app.use("/api/carts/", cartRouter);
