@@ -1,13 +1,12 @@
 import { Router } from 'express';
-import ProductManager from '../ProductManager.js';
-
-const productManager = new ProductManager('./products.json');
+import { productController } from '../utils/instances.js';
+import { io } from '../utils/socket.js';
 
 const productsRouter = Router();
 
 productsRouter.get('/', async (req, res) => {
     try {
-        let products = await productManager.getProducts();
+        let products = await productController.getProducts();
         let limit = parseInt(req.query.limit);
         if (!limit) {
             res.send(products);
@@ -24,8 +23,9 @@ productsRouter.get('/', async (req, res) => {
 productsRouter.post('/', async (req, res) => {
     try {
         let product = req.body;
-        productManager.addProduct(product);
+        productController.addProduct(product);
         res.status(201).send(product);
+        io.emit('productsUpdated', await productController.getProducts());
     } catch (err) {
         res.status(400).send({ err });
     }
@@ -33,7 +33,7 @@ productsRouter.post('/', async (req, res) => {
 
 productsRouter.get('/:pid', async (req, res) => {
     try {
-        let products = await productManager.getProducts();
+        let products = await productController.getProducts();
         let idProduct = products.find((prod) => {
             return prod.id == req.params.pid;
         })
@@ -52,7 +52,7 @@ productsRouter.get('/:pid', async (req, res) => {
 productsRouter.put('/:pid', async (req, res) => {
     try {
         let product = req.body;
-        await productManager.updateProduct(req.params.pid, product);
+        await productController.updateProduct(req.params.pid, product);
         return res.send(product);
     } catch (err) {
         res.status(400).send({ err });
@@ -62,8 +62,9 @@ productsRouter.put('/:pid', async (req, res) => {
 productsRouter.delete('/:pid', async (req, res) => {
     const id = req.params.pid;
     try {
-        productManager.deleteProduct(id);
+        productController.deleteProduct(id);
         res.send();
+        io.emit('productsUpdated', await productController.getProducts());
     } catch (err) {
         res.status(400).send({ err });
     }

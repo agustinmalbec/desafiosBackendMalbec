@@ -1,6 +1,6 @@
 import { existsSync, writeFileSync, promises } from 'fs';
 
-export default class CartManager {
+export default class CartController {
 
     constructor() {
         this.path = './carts.json';
@@ -66,7 +66,7 @@ export default class CartManager {
 
 }
 
-/* const pr = new CartManager();
+/* const pr = new CartController();
 const test = async () => {
 
     try {
