@@ -1,12 +1,13 @@
 import { Router } from 'express';
-import { cartController } from '../utils/instances.js';
-import { productController } from '../utils/instances.js';
+import { cartService } from '../utils/instances.js';
+import { productService } from '../utils/instances.js';
 
 const cartRouter = Router();
 
 cartRouter.post('/', async (req, res) => {
+    let cart = req.body;
     try {
-        await cartController.addCart();
+        await cartService.addCart(cart);
         res.status(201).send("Agregado correctamente");
     } catch (err) {
         res.status(400).send({ err });
@@ -15,17 +16,26 @@ cartRouter.post('/', async (req, res) => {
 
 cartRouter.post('/:cid/product/:pid', async (req, res) => {
     try {
-        let prod = await productController.getProductById(req.params.pid)
-        await cartController.addProductToCart(req.params.cid, prod);
+        const prod = await productService.getProductById(req.params.pid);
+        await cartService.addProductToCart(req.params.cid, prod._id);
         res.status(201).send(prod);
     } catch (err) {
         res.status(400).send({ err });
     }
 })
 
+cartRouter.get('/', async (req, res) => {
+    try {
+        let carts = await cartService.getCarts();
+        return res.status(201).send(carts);
+    } catch (err) {
+        res.status(400).send({ err });
+    }
+});
+
 cartRouter.get('/:cid', async (req, res) => {
     try {
-        let carts = await cartController.getCarts();
+        let carts = await cartService.getCarts();
         let cartId = carts.find((cart) => {
             return cart.id == req.params.cid;
         })

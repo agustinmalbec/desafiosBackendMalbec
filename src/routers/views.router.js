@@ -1,11 +1,12 @@
 import { Router } from "express";
-import { productController } from '../utils/instances.js';
+import { productService } from '../utils/instances.js';
+import { messagesService } from "../dao/Message.service.js";
 
 const viewsRouter = Router();
 
 viewsRouter.get('/', async (req, res) => {
     try {
-        const products = await productController.getProducts();
+        const products = await productService.getProducts();
         res.render('index', { products });
     } catch (err) {
         res.status(400).send({ err });
@@ -20,5 +21,15 @@ viewsRouter.get('/realtimeproducts', async (req, res) => {
     }
 
 })
+
+viewsRouter.get('/chat', async (req, res) => {
+    try {
+        const messages = await messagesService.getAllMessages();
+        console.log(messages)
+        res.render('chat', { messages });
+    } catch (err) {
+        res.status(500).send({ err });
+    }
+});
 
 export { viewsRouter };

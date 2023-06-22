@@ -1,6 +1,6 @@
 import { existsSync, writeFileSync, promises } from 'fs';
 
-export default class CartController {
+export default class CartService {
 
     constructor() {
         this.path = './carts.json';
@@ -42,8 +42,6 @@ export default class CartController {
             if (find) {
                 find.quantity++;
             }
-
-            console.log(product.id)
             await promises.writeFile(
                 this.path,
                 JSON.stringify(actualCarts)
@@ -66,7 +64,7 @@ export default class CartController {
 
 }
 
-/* const pr = new CartController();
+/* const pr = new cartService();
 const test = async () => {
 
     try {

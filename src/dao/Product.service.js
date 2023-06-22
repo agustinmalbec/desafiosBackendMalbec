@@ -1,6 +1,6 @@
 import { existsSync, writeFileSync, promises } from 'fs';
 
-export default class ProductController {
+export default class ProductService {
 
     constructor(path) {
         this.path = path;
@@ -80,8 +80,7 @@ export default class ProductController {
 
     }
 }
-
-/* const pm = new ProductController('./products.json');
+/* const pm = new productService('./products.json');
 
 
 const test = async () => {
