@@ -24,9 +24,7 @@ viewsRouter.get('/realtimeproducts', async (req, res) => {
 
 viewsRouter.get('/chat', async (req, res) => {
     try {
-        const messages = await messagesService.getAllMessages();
-        console.log(messages)
-        res.render('chat', { messages });
+        res.render('chat', {});
     } catch (err) {
         res.status(500).send({ err });
     }

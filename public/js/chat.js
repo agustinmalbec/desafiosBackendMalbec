@@ -11,16 +11,8 @@ inputMessage.addEventListener('keyup', (event) => {
     }
 });
 
+
 function render(data) {
-    const html = data.map((elem) => {
-        return `<div>
-                <em>${elem}</em>
-            </div>`;
-    })
-        .join(' ');
-    document.getElementById('messages').innerHTML = html;
-}
-function renderNew(data) {
     const html = data.map((elem) => {
         return `<div>
                 <em>${elem.message}</em>
@@ -30,13 +22,6 @@ function renderNew(data) {
     document.getElementById('history').innerHTML = html;
 }
 
-socket.on('oldMessages', (data) => {
-    console.log("old", data)
-    renderNew(data);
-});
-socket.on('newMessage', (data) => {
-    console.log("new", data)
-    const ddata = [];
-    ddata.push(data)
-    render(ddata);
+socket.on('messages', (data) => {
+    render(data);
 });

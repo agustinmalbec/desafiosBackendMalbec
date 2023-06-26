@@ -11,12 +11,12 @@ export const io = new Server(server);
 io.on('connection', async (socket) => {
     console.log('Nuevo Cliente conectado');
 
-    let messages = await messagesService.getAllMessages();
-
     socket.emit('products', await productService.getProducts());
-    socket.emit('oldMessages', messages);
+    socket.emit('messages', await messagesService.getAllMessages());
     socket.on('sendMessage', async (message) => {
-        await messagesService.addMessage(message);
-        io.emit('newMessage', message);
+        await messagesService.addMessage(message);/* 
+        io.emit('newMessage', message); */
+        socket.emit('messages', await messagesService.getAllMessages());
     });
+
 });
