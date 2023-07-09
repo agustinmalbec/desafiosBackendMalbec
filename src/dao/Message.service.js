@@ -9,8 +9,20 @@ class MessagesService {
         return await this.model.find();
     }
 
-    async addMessage(msj) {
-        return await this.model.create({ message: msj });
+    async addUser(user) {
+        let finded = await this.model.findOne({ user });
+        if (finded) {
+            return finded.user;
+        }
+        await this.model.create({ user });
+        finded = await this.model.findOne({ user });
+        return finded.user;
+    }
+
+    async addMessage(user, msj) {
+        const finded = await this.model.findOne({ user });
+        finded.message.push(msj);
+        return await finded.save();
     }
 }
 

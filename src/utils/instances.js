@@ -8,4 +8,4 @@ import CartMongoService from '../dao/CartMongo.service.js';
 import ProductMongoService from '../dao/ProductMongo.service.js';
 
 export const productService = new ProductMongoService();
-export const cartService = new CartMongoService(); 
+export const cartService = new CartMongoService();

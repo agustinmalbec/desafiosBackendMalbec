@@ -35,17 +35,51 @@ cartRouter.get('/', async (req, res) => {
 
 cartRouter.get('/:cid', async (req, res) => {
     try {
-        let carts = await cartService.getCarts();
-        let cartId = carts.find((cart) => {
-            return cart.id == req.params.cid;
-        })
-
-        if (cartId) {
-            return res.status(201).send(cartId);
+        const cartId = req.params.cid;
+        const cart = await cartService.getSinleCart(cartId);
+        if (cart) {
+            return res.status(201).send(cart);
         } else {
             return res.send(console.log('El carrito no se encontro'));
         }
 
+    } catch (err) {
+        res.status(400).send({ err });
+    }
+});
+
+cartRouter.delete('/:cid/product/:pid', async (req, res) => {
+    try {
+        const deleted = await cartService.deleteProductFromCart(req.params.cid, req.params.pid);
+        res.status(201).send(deleted);
+    } catch (err) {
+        res.status(400).send({ err });
+    }
+});
+
+cartRouter.delete('/:cid', async (req, res) => {
+    try {
+        const deleted = await cartService.deleteCart(req.params.cid);
+        res.status(201).send(deleted);
+    } catch (err) {
+        res.status(400).send({ err });
+    }
+});
+
+cartRouter.put('/:cid', async (req, res) => {
+    try {
+        const cartUpdated = await cartService.updateCart(req.params.cid, req.body);
+        res.status(201).send(cartUpdated);
+    } catch (err) {
+        res.status(400).send({ err });
+    }
+});
+
+cartRouter.put('/:cid/products/:pid', async (req, res) => {
+    try {
+        const quantity = req.body.quantity;
+        const productUpdated = await cartService.updateProductCart(req.params.cid, req.params.pid, quantity);
+        res.status(201).send(productUpdated);
     } catch (err) {
         res.status(400).send({ err });
     }

@@ -1,8 +1,11 @@
-import { Router } from 'express';
+import { Router, query } from 'express';
 import { productService } from '../utils/instances.js';
 import { io } from '../utils/socket.js';
+import productModel from '../models/product.model.js';
 
 const productsRouter = Router();
+
+
 
 productsRouter.get('/', async (req, res) => {
     try {
@@ -33,13 +36,9 @@ productsRouter.post('/', async (req, res) => {
 
 productsRouter.get('/:pid', async (req, res) => {
     try {
-        let products = await productService.getProducts();
-        let idProduct = products.find((prod) => {
-            return prod.id == req.params.pid;
-        })
-
-        if (idProduct) {
-            return res.send(idProduct);
+        const product = await productService.getProductById(req.params.pid)
+        if (product) {
+            return res.send(product);
         } else {
             return res.send(console.log('El producto no se encontro'));
         }

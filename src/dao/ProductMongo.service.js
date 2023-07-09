@@ -1,4 +1,4 @@
-import { productModel } from "../models/product.model.js";
+import productModel from "../models/product.model.js";
 
 
 export default class ProductMongoService {
@@ -6,9 +6,13 @@ export default class ProductMongoService {
         this.model = productModel;
     }
 
-    async getProducts() {
+    async getProducts(limit = 10, page = 1, category = false, sort) {
         try {
-            return await this.model.find();
+            let filter = {};
+            if (category) {
+                filter = { category };
+            }
+            return this.model.paginate(filter, { lean: true, limit, page, filter, sort: { price: sort } });
         }
         catch (err) {
             return console.log("No se pudo obtener los productos");

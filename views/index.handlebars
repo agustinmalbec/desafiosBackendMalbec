@@ -1,13 +1,36 @@
 <h2>Productos</h2>
 
-{{!-- {{#each products}}
-  <div>
-    <h3>{{this.title}}</h3>
-    <span>{{this.price}}</span>
-  </div>
-{{/each}} --}}
-{{#if products}}
-  <div>
-    {{products}}
-  </div>
-{{/if}}
+{{#each docs}}
+<div class="col-md-3">
+	<div class="card">
+		<ul class="list-group list-group-flush">
+			<li class="list-group-item"><b>Nombre:</b> {{this.title}}</li>
+			<li class="list-group-item"><b>Categoria:</b> {{this.category}}</li>
+			<li class="list-group-item"><b>Precio:</b> {{this.price}}</li>
+			<li class="list-group-item"><b>Precio:</b> {{this.id}}</li>
+		</ul>
+		<input id="input" type="submit" value="{{this.id}}">Agregar al carrito</input>
+	</div>
+</div>
+{{/each}}
+
+<div class="col-12 text-center">
+	<nav>
+		<ul class="pagination">
+			{{#if hasPrevPage}} <li class="page-item"> {{else}}
+			<li class="page-item disabled">{{/if}}
+				<a class="page-link" href="?limit={{limit}}&page={{prevPage}}&price={{price}}">Previous</a>
+			</li>
+			<li class="page-item active" aria-current="page">
+				<a class="page-link" href="?limit={{limit}}&page={{page}}&price={{price}}">{{ page }}</a>
+			</li>
+			{{#if hasNextPage}} <li class="page-item"> {{else}}
+			<li class="page-item disabled">{{/if}}
+				<a class="page-link" href="?limit={{limit}}&page={{nextPage}}&price={{price}}">Next</a>
+			</li>
+		</ul>
+	</nav>
+</div>
+
+<script src="socket.io/socket.io.js"></script>
+<script src="js/index.js"></script>

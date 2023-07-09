@@ -1,25 +1,13 @@
 const socket = io();
 
-const render = async (data) => {
-    const html = document.getElementById('productList');
-    html.innerHTML = '';
-    await data.forEach((element) => {
-        const elementHtml = document.createElement('div');
-        elementHtml.innerHTML = ` <h2>${element.title}</h2>
-    <p>${element.description}</p>
-    <p>${element.code}</p>
-    <p>${element.price}</p>
-    <p>${element.stock}</p>
-    <p>${element.category}</p>
-    ${element.thumbnail ? `<p>${element.thumbnail}</p>` : ''}
-    `;
-        html.appendChild(elementHtml);
-    });
-};
+/* function addToCart(productId) {
 
-socket.on('products', (data) => {
-    render(data);
-});
-socket.on('productsUpdated', (data) => {
-    render(data);
-});
+     socket.emit('addProduct', productId); 
+} */
+
+const btn = document.getElementById("input")
+
+btn.addEventListener('click', (e) => {
+    const data = e.target.value;
+    console.log(data)
+})
