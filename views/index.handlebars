@@ -1,15 +1,29 @@
-<h2>Productos</h2>
+{{#if user}}
+<h2>Bienvenido {{user.first_name}} a la pagina de productos productos</h2>
+<p>Tus datos son</p>
+<ul>
+	<li>Nombre: {{user.first_name}}</li>
+	<li>Apellido: {{user.last_name}}</li>
+	<li>Email: {{user.email}}</li>
+	{{#if isAdmin}}
+	<li>Sos admin</li>
+	{{else}}
+	<li>Sos un usuario normal</li>
+	{{/if}}
+</ul>
+{{else}}
+<h2>Bienvenido invitado, estos son nuestros productos</h2>
+{{/if}}
 
-{{#each docs}}
+{{#each data.docs}}
 <div class="col-md-3">
 	<div class="card">
 		<ul class="list-group list-group-flush">
 			<li class="list-group-item"><b>Nombre:</b> {{this.title}}</li>
 			<li class="list-group-item"><b>Categoria:</b> {{this.category}}</li>
 			<li class="list-group-item"><b>Precio:</b> {{this.price}}</li>
-			<li class="list-group-item"><b>Precio:</b> {{this.id}}</li>
 		</ul>
-		<input id="input" type="submit" value="{{this.id}}">Agregar al carrito</input>
+		<button onclick="addToCart({{this.code}})">Agregar al carrito</button>
 	</div>
 </div>
 {{/each}}
@@ -17,16 +31,16 @@
 <div class="col-12 text-center">
 	<nav>
 		<ul class="pagination">
-			{{#if hasPrevPage}} <li class="page-item"> {{else}}
+			{{#if data.hasPrevPage}} <li class="page-item"> {{else}}
 			<li class="page-item disabled">{{/if}}
-				<a class="page-link" href="?limit={{limit}}&page={{prevPage}}&price={{price}}">Previous</a>
+				<a class="page-link" href="?limit={{data.limit}}&page={{data.prevPage}}&price={{data.price}}">Previous</a>
 			</li>
 			<li class="page-item active" aria-current="page">
-				<a class="page-link" href="?limit={{limit}}&page={{page}}&price={{price}}">{{ page }}</a>
+				<a class="page-link" href="?limit={{data.limit}}&page={{data.page}}&price={{data.price}}">{{ data.page }}</a>
 			</li>
-			{{#if hasNextPage}} <li class="page-item"> {{else}}
+			{{#if data.hasNextPage}} <li class="page-item"> {{else}}
 			<li class="page-item disabled">{{/if}}
-				<a class="page-link" href="?limit={{limit}}&page={{nextPage}}&price={{price}}">Next</a>
+				<a class="page-link" href="?limit={{data.limit}}&page={{data.nextPage}}&price={{data.price}}">Next</a>
 			</li>
 		</ul>
 	</nav>

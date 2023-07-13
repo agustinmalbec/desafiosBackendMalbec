@@ -16,10 +16,18 @@ export default class CartMongoService {
         }
     }
 
-    async addProductToCart(cartId, productId) {
+    async addProductToCart(cartId, productCode) {
         try {
             const cart = await this.model.findOne({ _id: cartId });
-            cart.products.push({ product: productId });
+            const prod = await productService.getProductByCode(productCode);
+            const find = cart.products.findIndex(e => e.product.code == productCode)
+            console.log(find)
+            if (find > 0) {
+                cart.products[find].quantity++;
+                console.log(cart.products[find].quantity)
+            } else {
+                cart.products.push({ product: prod._id });
+            }
             return await cart.save();
         }
         catch (err) {

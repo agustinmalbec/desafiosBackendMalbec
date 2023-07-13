@@ -8,11 +8,17 @@ viewsRouter.get('/', async (req, res) => {
     try {
         const { limit, page, category, sort } = req.query;
         const data = await productService.getProducts(limit, page, category, sort);
+        const { user } = req.session;
+        delete user.password;
         data.category = category;
-        console.log(data)
-        res.render('index', data);
-    } catch (err) {
-        res.status(400).send({ err });
+        res.render('index', {
+            data: data,
+            title: 'Productos',
+            user,
+            isAdmin: user.email === 'adminCoder@coder.com',
+        });
+    } catch (error) {
+        res.status(400).send({ error: error.message });
     }
 });
 
@@ -38,6 +44,26 @@ viewsRouter.get('/carts/:cid', async (req, res) => {
 viewsRouter.get('/chat', async (req, res) => {
     try {
         res.render('chat', {});
+    } catch (err) {
+        res.status(500).send({ err });
+    }
+});
+
+viewsRouter.get('/register', async (req, res) => {
+    try {
+        res.render('register', {
+            title: 'Registrar un nuevo usuario',
+        });
+    } catch (err) {
+        res.status(500).send({ err });
+    }
+});
+
+viewsRouter.get('/login', async (req, res) => {
+    try {
+        res.render('login', {
+            title: 'Inicia sesion',
+        });
     } catch (err) {
         res.status(500).send({ err });
     }

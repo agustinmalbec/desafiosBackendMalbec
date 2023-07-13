@@ -37,6 +37,15 @@ export default class ProductMongoService {
         }
     }
 
+    async getProductByCode(productCode) {
+        try {
+            return await this.model.findOne({ code: productCode });
+        }
+        catch (err) {
+            console.log("No se encontro el producto");
+        }
+    }
+
     async updateProduct(uid, product) {
         try {
             if (!uid) {
