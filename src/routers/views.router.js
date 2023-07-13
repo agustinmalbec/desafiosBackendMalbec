@@ -18,7 +18,7 @@ viewsRouter.get('/', async (req, res) => {
             isAdmin: user.email === 'adminCoder@coder.com',
         });
     } catch (error) {
-        res.status(400).send({ error: error.message });
+        res.redirect('/login');
     }
 });
 

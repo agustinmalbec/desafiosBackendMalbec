@@ -20,8 +20,7 @@ export default class CartMongoService {
         try {
             const cart = await this.model.findOne({ _id: cartId });
             const prod = await productService.getProductByCode(productCode);
-            const find = cart.products.findIndex(e => e.product.code == productCode)
-            console.log(find)
+            const find = cart.products.findIndex(e => e.product.code == productCode);
             if (find > 0) {
                 cart.products[find].quantity++;
                 console.log(cart.products[find].quantity)
