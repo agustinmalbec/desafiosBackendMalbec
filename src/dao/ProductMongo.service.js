@@ -12,6 +12,9 @@ export default class ProductMongoService {
             if (category) {
                 filter = { category };
             }
+            if (!limit) {
+                limit = 10;
+            }
             return this.model.paginate(filter, { lean: true, limit, page, filter, sort: { price: sort } });
         }
         catch (err) {

@@ -1,24 +1,27 @@
 import { Router } from "express";
 import { productService } from '../utils/instances.js';
 import { cartService } from "../utils/instances.js";
+import { isAuth, isGuest } from "../middleware/auth.middleware.js";
 
 const viewsRouter = Router();
 
-viewsRouter.get('/', async (req, res) => {
+viewsRouter.get('/', isAuth, async (req, res) => {
     try {
-        const { limit, page, category, sort } = req.query;
+        const { limit = 10, page = 1, category, sort } = req.query;
         const data = await productService.getProducts(limit, page, category, sort);
         const { user } = req.session;
         delete user.password;
         data.category = category;
+        let isAdmin = false;
+        if (user.email == 'adminCoder@coder.com') isAdmin = true;
         res.render('index', {
             data: data,
             title: 'Productos',
             user,
-            isAdmin: user.email === 'adminCoder@coder.com',
+            isAdmin
         });
     } catch (error) {
-        res.redirect('/login');
+        res.status(400).send({ err });
     }
 });
 
@@ -49,7 +52,7 @@ viewsRouter.get('/chat', async (req, res) => {
     }
 });
 
-viewsRouter.get('/register', async (req, res) => {
+viewsRouter.get('/register', isGuest, async (req, res) => {
     try {
         res.render('register', {
             title: 'Registrar un nuevo usuario',
@@ -59,7 +62,7 @@ viewsRouter.get('/register', async (req, res) => {
     }
 });
 
-viewsRouter.get('/login', async (req, res) => {
+viewsRouter.get('/login', isGuest, async (req, res) => {
     try {
         res.render('login', {
             title: 'Inicia sesion',

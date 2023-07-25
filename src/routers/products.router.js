@@ -1,7 +1,6 @@
-import { Router, query } from 'express';
+import { Router } from 'express';
 import { productService } from '../utils/instances.js';
 import { io } from '../utils/socket.js';
-import productModel from '../models/product.model.js';
 
 const productsRouter = Router();
 
@@ -9,15 +8,22 @@ const productsRouter = Router();
 
 productsRouter.get('/', async (req, res) => {
     try {
-        let products = await productService.getProducts();
-        let limit = parseInt(req.query.limit);
-        if (!limit) {
-            res.send(products);
-        } else {
-            let shortListProducts = products.slice(0, limit)
-            res.send(shortListProducts);
-        }
+        const { limit = 4, page = 2, sort, price } = req.query;
+        const products = await productService.getProducts(limit, page);
+        const prevPage = products.prevPage;
+        const nextPage = products.nextPage;
+        const prevLink =
+            prevPage &&
+            `${req.baseUrl}/?page=${prevPage}&limit=${limit}&sort=${sort || ""
+            }&price=${encodeURIComponent(price || "")}${price ? `&price=${price}` : ""
+            }`;
 
+        const nextLink =
+            nextPage &&
+            `${req.baseUrl}/?page=${nextPage}&limit=${limit}&sort=${sort || ""
+            }&price=${encodeURIComponent(price || "")}${price ? `&price=${price}` : ""
+            }`;
+        res.send({ status: "success", payload: products, prevLink: prevLink, nextLink: nextLink });
     } catch (err) {
         res.status(400).send({ err });
     }

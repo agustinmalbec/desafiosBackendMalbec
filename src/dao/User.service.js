@@ -13,6 +13,10 @@ class UserService {
         return await this.model.findOne({ email: email });
     }
 
+    async getUserById(id) {
+        return await this.model.findById(id);
+    }
+
     async createUser(user) {
         return await this.model.create(user);
     }

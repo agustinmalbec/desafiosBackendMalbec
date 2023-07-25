@@ -9,6 +9,8 @@ import { messagesRouter } from "./routers/messages.router.js";
 import userRouter from "./routers/user.router.js";
 import MongoStore from 'connect-mongo';
 import session from 'express-session';
+import initializePassport from "./config/passport.config.js";
+import { sessionRouter } from "./routers/session.router.js";
 
 // Servidor express
 
@@ -43,9 +45,10 @@ app.use('/api/products/', productsRouter);
 app.use('/api/carts/', cartRouter);
 app.use('/api/chat', messagesRouter);
 app.use('/api/users', userRouter);
+app.use('/api/session', sessionRouter);
 
 mongoose.connect(
     'mongodb+srv://agustinmalbec:123@ecommerce.ewu7s82.mongodb.net/?retryWrites=true&w=majority'
 );
 
-
+initializePassport();
