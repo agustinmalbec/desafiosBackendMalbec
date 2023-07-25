@@ -1,8 +1,70 @@
 import passport from "passport";
 import GitHubStrategy from 'passport-github2';
+import local from 'passport-local';
 import userService from "../dao/User.service.js";
+import { encryptPassword, comparePassword } from '../utils/encrypt.js';
+
+const LocalStrategy = local.Strategy;
 
 const initializePassport = () => {
+    passport.use('register', new LocalStrategy({ usernameField: 'email', passReqToCallback: true }, async (req, username, password, done) => {
+        const { first_name, last_name } = req.body;
+        try {
+            const user = await userService.getUserByEmail(username);
+
+            if (user) {
+                return done(null, false, { message: 'User alredy exists' });
+            }
+
+            const hashedPassword = encryptPassword(password);
+            const newUser = await userService.createUser({
+                first_name,
+                last_name,
+                email: username,
+                password: hashedPassword
+            });
+            return done(null, newUser);
+        } catch (error) {
+            done(error);
+        };
+    }));
+
+    passport.serializeUser((user, done) => {
+        if (user.email !== 'adminCoder@coder.com') {
+            done(null, user._id);
+        }
+        done(null, user)
+    });
+
+    passport.deserializeUser(async (id, done) => {
+        const user = await userService.getUserById(id);
+        done(null, user);
+    });
+
+    passport.use('login', new LocalStrategy({ usernameField: 'email' }, async (username, password, done) => {
+        try {
+            let user = {};
+            if (username === 'adminCoder@coder.com') {
+                user.first_name = 'Coder';
+                user.last_name = 'House';
+                user.email = 'adminCoder@coder.com';
+                user.password = '123';
+                if (user.password !== password) throw new Error('Contraseña incorrecta');
+            } else {
+                user = await userService.getUserByEmail(username);
+            };
+            if (!user) {
+                return done(null, false, { message: 'User not found' });
+            }
+            if (!comparePassword(user, password) && username !== 'adminCoder@coder.com') {
+                return done(null, false, { message: 'Invalid data' });
+            }
+            return done(null, user);
+        } catch (error) {
+            done(error);
+        }
+    }));
+
     passport.use('github', new GitHubStrategy({
         clientID: 'Iv1.121bc709b88c8123',
         clientSecret: 'bb2f24f35e1393db9ec0fe1bd8e295ad10f8891c',

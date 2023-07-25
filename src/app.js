@@ -11,6 +11,7 @@ import MongoStore from 'connect-mongo';
 import session from 'express-session';
 import initializePassport from "./config/passport.config.js";
 import { sessionRouter } from "./routers/session.router.js";
+import passport from "passport";
 
 // Servidor express
 
@@ -52,3 +53,5 @@ mongoose.connect(
 );
 
 initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
