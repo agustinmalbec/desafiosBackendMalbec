@@ -12,6 +12,9 @@ import session from 'express-session';
 import initializePassport from "./config/passport.config.js";
 import { sessionRouter } from "./routers/session.router.js";
 import passport from "passport";
+import cookieParser from "cookie-parser";
+
+const privatekey = 'privatekey';
 
 // Servidor express
 
@@ -34,6 +37,25 @@ app.use(session({
 })
 );
 
+const users = [{ username: 'admin', password: 'admin' }];
+
+app.post('/login', (req, res) => {
+    const { username, password } = req.body;
+    const user = users.find((user) => user.username === username);
+    if (!user) {
+        res.status(401).send({ message: 'User not found' });
+    }
+
+    if (user.password !== password) {
+        res.status(401).send({ message: 'User or Password not valid' });
+    }
+
+    const token = generateToken(user);
+    res.cookie('token', token, {
+        httpOnly: true,
+        maxAge: 60000,
+    }).send();
+});
 
 // Configuracion handlebars
 app.engine('handlebars', handlebars.engine());
@@ -52,6 +74,7 @@ mongoose.connect(
     'mongodb+srv://agustinmalbec:123@ecommerce.ewu7s82.mongodb.net/?retryWrites=true&w=majority'
 );
 
+app.use(cookieParser('B2zdY3B$pHmxW%'));
 initializePassport();
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.initialize());/* 
+app.use(passport.session()); */

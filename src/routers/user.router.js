@@ -1,5 +1,8 @@
 import { Router } from "express";
 import passport from "passport";
+import { generateToken, middlewarePassportJWT, authToken } from "../middleware/jwt.middleware.js";
+
+const privatekey = 'privatekey';
 
 const userRouter = Router();
 
@@ -10,9 +13,19 @@ userRouter.post('/', passport.authenticate('register', { failureRedirect: '/regi
 userRouter.post('/authentication', passport.authenticate('login', { failureRedirect: '/login' }), async (req, res) => {
     if (!req.user) return res.status(400).send('User not found');
     const user = req.user;
+    console.log(user)
     delete user.password;
-    req.session.user = user;
-    res.redirect('/');
+    const token = generateToken(user);
+    res.cookie('token', token, {
+        httpOnly: true,
+        maxAge: 60000,
+    }).redirect('/');
+    //req.session.user = user;
+    //res.redirect('/');
+});
+
+userRouter.get('/private', middlewarePassportJWT, (req, res) => {
+    res.status(200).send({ message: 'Private route', user: req.user });
 });
 
 userRouter.get('/logout', async (req, res) => {

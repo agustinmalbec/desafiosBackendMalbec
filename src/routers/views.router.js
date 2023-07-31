@@ -62,7 +62,7 @@ viewsRouter.get('/register', isGuest, async (req, res) => {
     }
 });
 
-viewsRouter.get('/login', isGuest, async (req, res) => {
+viewsRouter.get('/login', async (req, res) => {
     try {
         res.render('login', {
             title: 'Inicia sesion',
