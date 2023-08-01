@@ -42,6 +42,7 @@ const users = [{ username: 'admin', password: 'admin' }];
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
     const user = users.find((user) => user.username === username);
+    console.log(user)
     if (!user) {
         res.status(401).send({ message: 'User not found' });
     }

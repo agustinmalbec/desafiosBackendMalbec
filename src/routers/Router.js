@@ -1,7 +1,7 @@
 import { Router } from "express";
 import jwt from "jsonwebtoken";
 
-export default class Router {
+export default class MyRouter {
     constructor() {
         this.Router = Router();
         this.init();
@@ -13,19 +13,19 @@ export default class Router {
         return this.Router;
     }
 
-    get(path, polices, callback) {
+    get(path, polices, ...callback) {
         this.Router.get(path, this.handlerPolices(polices), this.applyCallback(callback));
     }
 
-    post(path, polices, callback) {
+    post(path, polices, ...callback) {
         this.Router.post(path, this.handlerPolices(polices), this.applyCallback(callback));
     }
 
-    put(path, polices, callback) {
+    put(path, polices, ...callback) {
         this.Router.put(path, this.handlerPolices(polices), this.applyCallback(callback));
     }
 
-    delete(path, polices, callback) {
+    delete(path, polices, ...callback) {
         this.Router.delete(path, this.handlerPolices(polices), this.applyCallback(callback));
     }
 
@@ -50,7 +50,7 @@ export default class Router {
         }
 
         const user = jwt.verify(token, 'secret');
-        if (!polices.include(user.role.toUpperCase())) {
+        if (!polices.includes(user.rol?.toUpperCase())) {
             return res.sendStatus(403).send({ status: 'Auth error', error: 'Forbidden' });
         }
 

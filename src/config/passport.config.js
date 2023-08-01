@@ -10,7 +10,7 @@ const jwtStrategy = Strategy;
 const jwtExtract = ExtractJwt;
 
 const initializePassport = () => {
-    passport.use('jwt', new jwtStrategy({
+    passport.use('current', new jwtStrategy({
         jwtFromRequest: jwtExtract.fromExtractors([cookieExtractor]),
         secretOrKey: 'privatekey',
     },
@@ -63,6 +63,7 @@ const initializePassport = () => {
 
     passport.use('login', new LocalStrategy({ usernameField: 'email' }, async (username, password, done) => {
         try {
+            console.log('asd')
             let user = {};
             if (username === 'adminCoder@coder.com') {
                 user.first_name = 'Coder';

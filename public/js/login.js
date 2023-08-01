@@ -9,7 +9,6 @@ function login() {
     })
         .then((response) => {
             alert(document.cookie);
-            window.location.href = '/';
         })
         .catch((error) => {
             console.error('Error:', error);
