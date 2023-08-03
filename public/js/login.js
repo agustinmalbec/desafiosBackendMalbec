@@ -9,6 +9,7 @@ function login() {
     })
         .then((response) => {
             alert(document.cookie);
+            window.location.href = '/api/users/private';
         })
         .catch((error) => {
             console.error('Error:', error);

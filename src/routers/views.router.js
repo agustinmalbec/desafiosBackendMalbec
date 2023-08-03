@@ -1,15 +1,16 @@
 import { Router } from "express";
 import { productService } from '../utils/instances.js';
 import { cartService } from "../utils/instances.js";
-import { isAuth, isGuest } from "../middleware/auth.middleware.js";
+//import { isAuth, isGuest } from "../middleware/auth.middleware.js";
 
 const viewsRouter = Router();
 
-viewsRouter.get('/', isAuth, async (req, res) => {
+viewsRouter.get('/', async (req, res) => {
     try {
         const { limit = 10, page = 1, category, sort } = req.query;
         const data = await productService.getProducts(limit, page, category, sort);
-        const { user } = req.session;
+        //const { user } = req.session;
+        const user = { email: 'asd', password: 'asd' }
         delete user.password;
         data.category = category;
         let isAdmin = false;
@@ -52,7 +53,7 @@ viewsRouter.get('/chat', async (req, res) => {
     }
 });
 
-viewsRouter.get('/register', isGuest, async (req, res) => {
+viewsRouter.get('/register', async (req, res) => {
     try {
         res.render('register', {
             title: 'Registrar un nuevo usuario',

@@ -16,13 +16,14 @@ import cookieParser from "cookie-parser";
 
 const privatekey = 'privatekey';
 
+
 // Servidor express
 
 app.use(express.json());
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 server.listen(8080, () => console.log('Estoy escuchando'));
-app.use(session({
+/* app.use(session({
     store: MongoStore.create({
         mongoUrl:
             'mongodb+srv://agustinmalbec:123@ecommerce.ewu7s82.mongodb.net/?retryWrites=true&w=majority',
@@ -35,9 +36,13 @@ app.use(session({
     resave: true,
     saveUninitialized: true,
 })
-);
+); */
+app.use(cookieParser('B2zdY3B$pHmxW%'));
+initializePassport();
+app.use(passport.initialize());
+//app.use(passport.session());
 
-const users = [{ username: 'admin', password: 'admin' }];
+/* const users = [{ username: 'admin', password: 'admin' }];
 
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
@@ -56,7 +61,7 @@ app.post('/login', (req, res) => {
         httpOnly: true,
         maxAge: 60000,
     }).send();
-});
+}); */
 
 // Configuracion handlebars
 app.engine('handlebars', handlebars.engine());
@@ -75,7 +80,4 @@ mongoose.connect(
     'mongodb+srv://agustinmalbec:123@ecommerce.ewu7s82.mongodb.net/?retryWrites=true&w=majority'
 );
 
-app.use(cookieParser('B2zdY3B$pHmxW%'));
-initializePassport();
-app.use(passport.initialize());/* 
-app.use(passport.session()); */
+

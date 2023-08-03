@@ -10,23 +10,6 @@ const jwtStrategy = Strategy;
 const jwtExtract = ExtractJwt;
 
 const initializePassport = () => {
-    passport.use('current', new jwtStrategy({
-        jwtFromRequest: jwtExtract.fromExtractors([cookieExtractor]),
-        secretOrKey: 'privatekey',
-    },
-        (payload, done) => {
-            done(null, payload);
-        }
-    ),
-        async (payload, done) => {
-            try {
-                return done(null, payload);
-            } catch (error) {
-                done(error);
-            }
-        }
-    );
-
     passport.use('register', new LocalStrategy({ usernameField: 'email', passReqToCallback: true }, async (req, username, password, done) => {
         const { first_name, last_name } = req.body;
         try {
@@ -62,8 +45,9 @@ const initializePassport = () => {
     });
 
     passport.use('login', new LocalStrategy({ usernameField: 'email' }, async (username, password, done) => {
+        console.log('asd')
         try {
-            console.log('asd')
+
             let user = {};
             if (username === 'adminCoder@coder.com') {
                 user.first_name = 'Coder';
@@ -110,6 +94,24 @@ const initializePassport = () => {
         };
 
     }));
+
+
+    passport.use('current', new jwtStrategy({
+        jwtFromRequest: jwtExtract.fromExtractors([cookieExtractor]),
+        secretOrKey: 'privatekey',
+    },
+        (payload, done) => {
+            done(null, payload);
+        }
+    ),
+        async (payload, done) => {
+            try {
+                return done(null, payload);
+            } catch (error) {
+                done(error);
+            }
+        }
+    );
 };
 
 const cookieExtractor = (req) => {

@@ -1,4 +1,4 @@
-export function isAuth(req, res, next) {
+/* export function isAuth(req, res, next) {
     if (req.session.user) {
         next();
     } else {
@@ -12,4 +12,4 @@ export function isGuest(req, res, next) {
     } else {
         res.redirect('/');
     }
-}
+} */
