@@ -22,4 +22,4 @@ messagesRouter.post('/', async (req, res) => {
     }
 });
 
-export { messagesRouter };
+export default messagesRouter;

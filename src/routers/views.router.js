@@ -1,16 +1,16 @@
 import { Router } from "express";
 import { productService } from '../utils/instances.js';
 import { cartService } from "../utils/instances.js";
+import { middlewarePassportJWT } from "../middleware/jwt.middleware.js";
 //import { isAuth, isGuest } from "../middleware/auth.middleware.js";
 
 const viewsRouter = Router();
 
-viewsRouter.get('/', async (req, res) => {
+viewsRouter.get('/', middlewarePassportJWT, async (req, res) => {
     try {
         const { limit = 10, page = 1, category, sort } = req.query;
         const data = await productService.getProducts(limit, page, category, sort);
-        //const { user } = req.session;
-        const user = { email: 'asd', password: 'asd' }
+        const user = req.user;
         delete user.password;
         data.category = category;
         let isAdmin = false;
@@ -73,4 +73,4 @@ viewsRouter.get('/login', async (req, res) => {
     }
 });
 
-export { viewsRouter };
+export default viewsRouter;

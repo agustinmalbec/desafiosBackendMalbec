@@ -5,55 +5,47 @@ import userService from "../dao/User.service.js";
 import { encryptPassword, comparePassword } from '../utils/encrypt.js';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 
-const LocalStrategy = local.Strategy;
+const localStrategy = local.Strategy;
 const jwtStrategy = Strategy;
 const jwtExtract = ExtractJwt;
+const admin = {
+    first_name: 'Coder',
+    last_name: 'House',
+    email: 'adminCoder@coder.com',
+    password: '123',
+    role: 'admin',
+};
 
 const initializePassport = () => {
-    passport.use('register', new LocalStrategy({ usernameField: 'email', passReqToCallback: true }, async (req, username, password, done) => {
-        const { first_name, last_name } = req.body;
+    passport.use('register', new localStrategy({ usernameField: 'email', passReqToCallback: true }, async (req, username, password, done) => {
+        const { first_name, last_name, age } = req.body;
         try {
             const user = await userService.getUserByEmail(username);
-
             if (user) {
-                return done(null, false, { message: 'User alredy exists' });
+                return done(null, false, {
+                    message: 'User already exists',
+                });
             }
-
             const hashedPassword = encryptPassword(password);
+
             const newUser = await userService.createUser({
                 first_name,
                 last_name,
                 email: username,
-                password: hashedPassword
+                age,
+                password: hashedPassword,
             });
             return done(null, newUser);
         } catch (error) {
             done(error);
-        };
+        }
     }));
 
-    passport.serializeUser((user, done) => {
-        if (user.email !== 'adminCoder@coder.com') {
-            done(null, user._id);
-        }
-        done(null, user)
-    });
-
-    passport.deserializeUser(async (id, done) => {
-        const user = await userService.getUserById(id);
-        done(null, user);
-    });
-
-    passport.use('login', new LocalStrategy({ usernameField: 'email' }, async (username, password, done) => {
-        console.log('asd')
+    passport.use('login', new localStrategy({ usernameField: 'email' }, async (username, password, done) => {
         try {
-
             let user = {};
             if (username === 'adminCoder@coder.com') {
-                user.first_name = 'Coder';
-                user.last_name = 'House';
-                user.email = 'adminCoder@coder.com';
-                user.password = '123';
+                user = admin;
                 if (user.password !== password) throw new Error('Contraseña incorrecta');
             } else {
                 user = await userService.getUserByEmail(username);
@@ -69,6 +61,20 @@ const initializePassport = () => {
             done(error);
         }
     }));
+
+    passport.serializeUser((user, done) => {
+        if (user.email !== 'adminCoder@coder.com') {
+            done(null, user._id);
+        }
+        done(null, user)
+    });
+
+    passport.deserializeUser(async (id, done) => {
+        const user = await userService.getUserById(id);
+        done(null, user);
+    });
+
+
 
     passport.use('github', new GitHubStrategy({
         clientID: 'Iv1.121bc709b88c8123',

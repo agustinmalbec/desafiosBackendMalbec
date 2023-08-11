@@ -8,8 +8,7 @@ function login() {
         body: JSON.stringify(data),
     })
         .then((response) => {
-            alert(document.cookie);
-            window.location.href = '/api/users/private';
+            window.location.href = '/api/session/current';
         })
         .catch((error) => {
             console.error('Error:', error);

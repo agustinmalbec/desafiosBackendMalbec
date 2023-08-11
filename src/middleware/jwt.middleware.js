@@ -4,16 +4,15 @@ import passport from 'passport';
 const privatekey = 'privatekey';
 
 const generateToken = (user) => {
-    return jwt.sign(user, privatekey, { expiresIn: '1h' });
+    return jwt.sign(user.toJSON(), privatekey, { expiresIn: '1h' });
 };
 
 const authToken = (req, res, next) => {
-    const authHeader = req.cookies.token;
+    const authHeader = req.headers.authorization;
 
     if (!authHeader) {
         res.status(401).send({ message: 'Token not found' });
     }
-    const token = authHeader.split(' ')[1];
 
     jwt.verify(authHeader, privatekey, (err, credentials) => {
         if (err) {
@@ -31,13 +30,15 @@ const middlewarePassportJWT = async (req, res, next) => {
         }
 
         if (!usr) {
-            res.status(401).send({
+            /* res.status(401).send({
                 message: info.messages ? info.messages : info.toString(),
-            });
+            }); */
+            res.redirect('/login');
+        } else {
+            req.user = usr;
+            next();
         }
 
-        req.user = usr;
-        next();
     })(req, res, next);
 };
 

@@ -84,4 +84,4 @@ cartRouter.put('/:cid/products/:pid', async (req, res) => {
     }
 });
 
-export { cartRouter };
+export default cartRouter;
