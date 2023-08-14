@@ -10,11 +10,11 @@ viewsRouter.get('/', middlewarePassportJWT, async (req, res) => {
     try {
         const { limit = 10, page = 1, category, sort } = req.query;
         const data = await productService.getProducts(limit, page, category, sort);
-        const user = req.user;
+        const { user } = req.user;
         delete user.password;
         data.category = category;
         let isAdmin = false;
-        if (user.email == 'adminCoder@coder.com') isAdmin = true;
+        if (user.role === 'admin') isAdmin = true;
         res.render('index', {
             data: data,
             title: 'Productos',
