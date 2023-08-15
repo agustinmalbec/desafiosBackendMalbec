@@ -4,17 +4,11 @@ import local from 'passport-local';
 import userService from "../dao/User.service.js";
 import { encryptPassword, comparePassword } from '../utils/encrypt.js';
 import { Strategy, ExtractJwt } from 'passport-jwt';
+import enviroment from "./enviroment.config.js";
 
 const localStrategy = local.Strategy;
 const jwtStrategy = Strategy;
 const jwtExtract = ExtractJwt;
-const admin = {
-    first_name: 'Coder',
-    last_name: 'House',
-    email: 'adminCoder@coder.com',
-    password: '123',
-    role: 'admin',
-};
 
 const initializePassport = () => {
     passport.use('register', new localStrategy({ usernameField: 'email', passReqToCallback: true }, async (req, username, password, done) => {
@@ -41,7 +35,7 @@ const initializePassport = () => {
         }
     }));
 
-    passport.use('login', new localStrategy({ usernameField: 'email' }, async (username, password, done) => {
+    /* passport.use('login', new localStrategy({ usernameField: 'email' }, async (username, password, done) => {
         try {
             let user = {};
             if (username === 'adminCoder@coder.com') {
@@ -60,10 +54,10 @@ const initializePassport = () => {
         } catch (error) {
             done(error);
         }
-    }));
+    })); */
 
     passport.serializeUser((user, done) => {
-        if (user.email !== 'adminCoder@coder.com') {
+        if (user.email !== enviroment.ADMIN_USERNAME) {
             done(null, user._id);
         }
         done(null, user)
@@ -77,8 +71,8 @@ const initializePassport = () => {
 
 
     passport.use('github', new GitHubStrategy({
-        clientID: 'Iv1.121bc709b88c8123',
-        clientSecret: 'bb2f24f35e1393db9ec0fe1bd8e295ad10f8891c',
+        clientID: enviroment.GITHUB_CLIENT_ID,
+        clientSecret: enviroment.GITHUB_CLIENT_SECRET,
         callbackURL: 'http://localhost:8080/api/session/githubcallback',
     }, async (accesToken, refreshToken, profile, done) => {
         try {
@@ -104,7 +98,7 @@ const initializePassport = () => {
 
     passport.use('current', new jwtStrategy({
         jwtFromRequest: jwtExtract.fromExtractors([cookieExtractor]),
-        secretOrKey: 'privatekey',
+        secretOrKey: enviroment.SECRET_KEY,
     },
         (payload, done) => {
             done(null, payload);

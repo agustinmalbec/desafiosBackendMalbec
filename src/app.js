@@ -45,20 +45,18 @@ app.set('views', 'views/');
 app.set('view engine', 'handlebars');
 
 app.use(session({
-    secret: 'B2zdY3B$pHmxW%',
+    secret: enviroment.KEY,
     resave: true,
     saveUninitialized: true,
 }));
 
-app.use(cookieParser('B2zdY3B$pHmxW%'));
+app.use(cookieParser(enviroment.KEY));
 initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
 
 
-mongoose.connect(
-    'mongodb+srv://agustinmalbec:123@ecommerce.ewu7s82.mongodb.net/?retryWrites=true&w=majority'
-);
+mongoose.connect(enviroment.DB_LINK);
 
 // Rutas
 app.use('/', viewsRouter);
