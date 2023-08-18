@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { productService } from '../utils/instances.js';
+import productController from '../controllers/product.controller.js';
 import { io } from '../utils/socket.js';
 
 const productsRouter = Router();
@@ -9,7 +9,7 @@ const productsRouter = Router();
 productsRouter.get('/', async (req, res) => {
     try {
         const { limit = 4, page = 2, sort, price } = req.query;
-        const products = await productService.getProducts(limit, page);
+        const products = await productController.getProducts(limit, page);
         const prevPage = products.prevPage;
         const nextPage = products.nextPage;
         const prevLink =
@@ -32,9 +32,9 @@ productsRouter.get('/', async (req, res) => {
 productsRouter.post('/', async (req, res) => {
     try {
         let product = req.body;
-        productService.addProduct(product);
+        productController.addProduct(product);
         res.status(201).send(product);
-        io.emit('productsUpdated', await productService.getProducts());
+        io.emit('productsUpdated', await productController.getProducts());
     } catch (err) {
         res.status(400).send({ err });
     }
@@ -42,7 +42,7 @@ productsRouter.post('/', async (req, res) => {
 
 productsRouter.get('/:pid', async (req, res) => {
     try {
-        const product = await productService.getProductById(req.params.pid)
+        const product = await productController.getProductById(req.params.pid)
         if (product) {
             return res.send(product);
         } else {
@@ -57,7 +57,7 @@ productsRouter.get('/:pid', async (req, res) => {
 productsRouter.put('/:pid', async (req, res) => {
     try {
         let product = req.body;
-        await productService.updateProduct(req.params.pid, product);
+        await productController.updateProduct(req.params.pid, product);
         return res.send(product);
     } catch (err) {
         res.status(400).send({ err });
@@ -67,9 +67,9 @@ productsRouter.put('/:pid', async (req, res) => {
 productsRouter.delete('/:pid', async (req, res) => {
     const id = req.params.pid;
     try {
-        productService.deleteProduct(id);
+        productController.deleteProduct(id);
         res.send();
-        io.emit('productsUpdated', await productService.getProducts());
+        io.emit('productsUpdated', await productController.getProducts());
     } catch (err) {
         res.status(400).send({ err });
     }

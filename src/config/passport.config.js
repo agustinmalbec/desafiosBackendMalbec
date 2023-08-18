@@ -1,7 +1,7 @@
 import passport from "passport";
 import GitHubStrategy from 'passport-github2';
 import local from 'passport-local';
-import userService from "../dao/User.service.js";
+import userController from "../controllers/user.controller.js";
 import { encryptPassword, comparePassword } from '../utils/encrypt.js';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import enviroment from "./enviroment.config.js";
@@ -14,7 +14,7 @@ const initializePassport = () => {
     passport.use('register', new localStrategy({ usernameField: 'email', passReqToCallback: true }, async (req, username, password, done) => {
         const { first_name, last_name, age } = req.body;
         try {
-            const user = await userService.getUserByEmail(username);
+            const user = await userController.getUserByEmail(username);
             if (user) {
                 return done(null, false, {
                     message: 'User already exists',
@@ -22,7 +22,7 @@ const initializePassport = () => {
             }
             const hashedPassword = encryptPassword(password);
 
-            const newUser = await userService.createUser({
+            const newUser = await userController.createUser({
                 first_name,
                 last_name,
                 email: username,
@@ -42,7 +42,7 @@ const initializePassport = () => {
                 user = admin;
                 if (user.password !== password) throw new Error('Contraseña incorrecta');
             } else {
-                user = await userService.getUserByEmail(username);
+                user = await userController.getUserByEmail(username);
             };
             if (!user) {
                 return done(null, false, { message: 'User not found' });
@@ -64,7 +64,7 @@ const initializePassport = () => {
     });
 
     passport.deserializeUser(async (id, done) => {
-        const user = await userService.getUserById(id);
+        const user = await userController.getUserById(id);
         done(null, user);
     });
 
@@ -76,7 +76,7 @@ const initializePassport = () => {
         callbackURL: 'http://localhost:8080/api/session/githubcallback',
     }, async (accesToken, refreshToken, profile, done) => {
         try {
-            let user = await userService.getUserByEmail(profile._json.email);
+            let user = await userController.getUserByEmail(profile._json.email);
             if (!user) {
                 let newUser = {
                     first_name: profile._json.name,
@@ -84,7 +84,7 @@ const initializePassport = () => {
                     email: profile._json.email,
                     password: '',
                 };
-                user = await userService.createUser(newUser);
+                user = await userController.createUser(newUser);
                 done(null, user);
             } else {
                 done(null, user);

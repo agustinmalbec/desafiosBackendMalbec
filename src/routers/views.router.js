@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { productService } from '../utils/instances.js';
-import { cartService } from "../utils/instances.js";
+import productController from "../controllers/product.controller.js";
+import cartController from "../controllers/cart.controller.js";
 import { middlewarePassportJWT } from "../middleware/jwt.middleware.js";
 //import { isAuth, isGuest } from "../middleware/auth.middleware.js";
 
@@ -9,7 +9,7 @@ const viewsRouter = Router();
 viewsRouter.get('/', middlewarePassportJWT, async (req, res) => {
     try {
         const { limit = 10, page = 1, category, sort } = req.query;
-        const data = await productService.getProducts(limit, page, category, sort);
+        const data = await productController.getProducts(limit, page, category, sort);
         const { user } = req.user;
         delete user.password;
         data.category = category;
@@ -22,7 +22,7 @@ viewsRouter.get('/', middlewarePassportJWT, async (req, res) => {
             isAdmin
         });
     } catch (error) {
-        res.status(400).send({ err });
+        res.status(400).send(error);
     }
 });
 
@@ -38,7 +38,7 @@ viewsRouter.get('/realtimeproducts', async (req, res) => {
 viewsRouter.get('/carts/:cid', async (req, res) => {
     try {
         const cartId = req.params.cid;
-        const data = await cartService.getSinleCart(cartId);
+        const data = await cartController.getSinleCart(cartId);
         res.render('carts', { data: data.products });
     } catch (err) {
         res.status(500).send({ err });

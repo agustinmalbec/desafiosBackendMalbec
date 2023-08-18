@@ -1,9 +1,9 @@
 import { Server } from 'socket.io';
 import express from 'express';
 import http from 'http';
-import { productService } from '../utils/instances.js';
-import { messagesService } from '../dao/Message.service.js';
-import { cartService } from '../utils/instances.js';
+import productController from '../controllers/product.controller.js';
+import { messagesService } from '../daos/Message.service.js';
+import cartController from '../controllers/cart.controller.js';
 
 export const app = express();
 export const server = http.createServer(app);
@@ -13,7 +13,7 @@ let us;
 io.on('connection', async (socket) => {
     console.log('Nuevo Cliente conectado');
 
-    socket.emit('products', await productService.getProducts());
+    socket.emit('products', await productController.getProducts());
     socket.emit('messages', await messagesService.getAllMessages());
     socket.on('newUser', async (user) => {
         us = await messagesService.addUser(user);
@@ -23,6 +23,6 @@ io.on('connection', async (socket) => {
         socket.emit('messages', await messagesService.getAllMessages());
     });
     socket.on('addProduct', async (product) => {
-        await cartService.addProductToCart('64aec16095d176aa3bfa7685', product);
+        await cartController.addProductToCart('64aec16095d176aa3bfa7685', product);
     })
 });
