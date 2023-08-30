@@ -5,7 +5,6 @@ import enviroment from '../config/enviroment.config.js';
 const privatekey = enviroment.SECRET_KEY;
 
 const generateToken = (user) => {
-    user.password = '';
     return jwt.sign({ user }, privatekey, { expiresIn: '1h' });
 };
 

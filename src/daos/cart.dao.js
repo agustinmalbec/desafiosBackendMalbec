@@ -5,8 +5,9 @@ class CartDAO {
         this.model = cartModel;
     }
 
-    addCart(cart) {
-        return this.model.create(cart);
+    addCart() {
+        const cart = this.model.create();
+        return cart;
     }
 
     getCarts() {

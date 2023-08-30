@@ -1,12 +1,14 @@
 import cartDAO from "../daos/cart.dao.js";
+import CartDTO from "../dtos/cart.dto.js";
 
 class CartService {
     constructor() {
         this.service = cartDAO;
     }
 
-    addCart(cart) {
-        return this.service.addCart(cart);
+    addCart() {
+        const newCart = new CartDTO();
+        return this.service.addCart(newCart);
     }
 
     getCarts() {

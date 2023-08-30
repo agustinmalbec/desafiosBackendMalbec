@@ -22,7 +22,7 @@ io.on('connection', async (socket) => {
         await messagesService.addMessage(us, message);
         socket.emit('messages', await messagesService.getAllMessages());
     });
-    socket.on('addProduct', async (product) => {
-        await cartController.addProductToCart('64aec16095d176aa3bfa7685', product);
+    socket.on('addProduct', async (cart, product) => {
+        await cartController.addProductToCart(cart, product);
     })
 });

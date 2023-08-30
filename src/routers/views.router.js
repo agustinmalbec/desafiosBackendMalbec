@@ -2,11 +2,11 @@ import { Router } from "express";
 import productController from "../controllers/product.controller.js";
 import cartController from "../controllers/cart.controller.js";
 import { middlewarePassportJWT } from "../middleware/jwt.middleware.js";
-//import { isAuth, isGuest } from "../middleware/auth.middleware.js";
+import { isAuth, isGuest } from "../middleware/auth.middleware.js";
 
 const viewsRouter = Router();
 
-viewsRouter.get('/', middlewarePassportJWT, async (req, res) => {
+viewsRouter.get('/', middlewarePassportJWT, isAuth, async (req, res) => {
     try {
         const { limit = 10, page = 1, category, sort } = req.query;
         const data = await productController.getProducts(limit, page, category, sort);

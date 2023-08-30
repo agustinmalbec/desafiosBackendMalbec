@@ -5,6 +5,7 @@ import userController from "../controllers/user.controller.js";
 import { encryptPassword, comparePassword } from '../utils/encrypt.js';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import enviroment from "./enviroment.config.js";
+import cartController from "../controllers/cart.controller.js";
 
 const localStrategy = local.Strategy;
 const jwtStrategy = Strategy;

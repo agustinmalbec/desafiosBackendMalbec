@@ -83,4 +83,12 @@ cartRouter.put('/:cid/products/:pid', async (req, res) => {
     }
 });
 
+cartRouter.put('/:cid/purchase', async (req, res) => {
+    try {
+
+    } catch (err) {
+        res.status(400).send({ err });
+    }
+});
+
 export default cartRouter;

@@ -1,4 +1,5 @@
 import productDAO from "../daos/product.dao.js";
+import ProductDTO from "../dtos/product.dto.js";
 
 class ProductService {
     constructor() {
@@ -10,7 +11,8 @@ class ProductService {
     }
 
     addProduct(product) {
-        return this.service.addProduct(product);
+        const newProduct = new ProductDTO(product);
+        return this.service.addProduct(newProduct);
     }
 
     getProductById(productId) {

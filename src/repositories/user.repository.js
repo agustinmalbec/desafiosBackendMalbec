@@ -1,4 +1,5 @@
 import userDAO from "../daos/user.dao.js";
+import UserDTO from "../dtos/user.dto.js";
 
 class UserService {
     constructor() {
@@ -18,7 +19,8 @@ class UserService {
     }
 
     createUser(user) {
-        return this.service.createUser(user);
+        const newUser = new UserDTO(user);
+        return this.service.createUser(newUser);
     }
 }
 

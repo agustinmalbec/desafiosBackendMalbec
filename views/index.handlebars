@@ -1,3 +1,4 @@
+<body onload="getUserCart('{{user.cart}}')">
 {{#if user}}
 <h2>Bienvenido {{user.first_name}} a la pagina de productos productos</h2>
 <p>Tus datos son</p>
@@ -49,3 +50,4 @@
 
 <script src="socket.io/socket.io.js"></script>
 <script src="js/index.js"></script>
+</body>

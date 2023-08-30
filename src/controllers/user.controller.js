@@ -1,4 +1,4 @@
-import userService from "../services/user.service.js";
+import userService from "../repositories/user.repository.js";
 
 class UserController {
     constructor() {

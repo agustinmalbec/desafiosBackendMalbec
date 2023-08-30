@@ -1,5 +1,5 @@
-import cartService from "../services/cart.service.js";
-import productService from "../services/product.service.js";
+import cartService from "../repositories/cart.repository.js";
+import productService from "../repositories/product.repository.js";
 
 class CartController {
     constructor() {
@@ -15,9 +15,9 @@ class CartController {
         }
     }
 
-    async addCart(cart) {
+    async addCart() {
         try {
-            return await this.controller.addCart(cart);
+            return await this.controller.addCart();
         }
         catch (err) {
             throw new Error("No se pudo agregar el carrito");
