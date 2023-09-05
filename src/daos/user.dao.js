@@ -5,20 +5,20 @@ class UserDAO {
         this.model = userModel;
     }
 
-    getUsers() {
-        return this.model.find();
+    async getUsers() {
+        return await this.model.find();
     }
 
-    getUserByEmail(email) {
-        return this.model.findOne({ email: email });
+    async getUserByEmail(email) {
+        return await this.model.findOne({ email: email });
     }
 
-    getUserById(id) {
-        return this.model.findById(id);
+    async getUserById(id) {
+        return await this.model.findById(id);
     }
 
-    createUser(user) {
-        return this.model.create(user);
+    async createUser(user) {
+        return await this.model.create(user);
     }
 }
 

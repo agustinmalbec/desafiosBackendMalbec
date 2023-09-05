@@ -15,9 +15,10 @@ class CartController {
         }
     }
 
-    async addCart() {
+    async addCart(cart) {
         try {
-            return await this.controller.addCart();
+            const newCart = await this.controller.addCart(cart);
+            return newCart;
         }
         catch (err) {
             throw new Error("No se pudo agregar el carrito");
@@ -28,16 +29,16 @@ class CartController {
         try {
             const cart = await this.controller.getSinleCart(cartId);
             const prod = await productService.getProductByCode(productCode);
-            const find = cart.products.findIndex(e => e.product.code == productCode);
+            const find = cart.products.findIndex(e => e.product._id == prod._id);
             if (find > 0) {
                 cart.products[find].quantity++;
-                console.log(cart.products[find].quantity)
             } else {
-                cart.products.push({ product: prod._id });
+                cart.products.push({ product: prod._id, quantity: 1 });
             }
-            return await cart.save();
+            return await this.controller.addProductToCart(cart);
         }
         catch (err) {
+            console.log(err)
             throw new Error("No se pudo agregar el producto");
         }
     }
@@ -73,13 +74,13 @@ class CartController {
         }
     }
 
-    async updateCart(cartId, products) {
+    /* async updateCart(cartId, products) {
         try {
             return await this.controller.updateCart(cartId, products);
         } catch (err) {
             throw new Error('Error al actualizar los productos en el carrito');
         }
-    }
+    } */
 
     async updateProductCart(cartId, productId, quantity) {
         try {

@@ -29,33 +29,13 @@ const initializePassport = () => {
                 email: username,
                 age,
                 password: hashedPassword,
+                cart: await cartController.addCart(),
             });
             return done(null, newUser);
         } catch (error) {
             done(error);
         }
     }));
-
-    /* passport.use('login', new localStrategy({ usernameField: 'email' }, async (username, password, done) => {
-        try {
-            let user = {};
-            if (username === 'adminCoder@coder.com') {
-                user = admin;
-                if (user.password !== password) throw new Error('Contraseña incorrecta');
-            } else {
-                user = await userController.getUserByEmail(username);
-            };
-            if (!user) {
-                return done(null, false, { message: 'User not found' });
-            }
-            if (!comparePassword(user, password) && username !== 'adminCoder@coder.com') {
-                return done(null, false, { message: 'Invalid data' });
-            }
-            return done(null, user);
-        } catch (error) {
-            done(error);
-        }
-    })); */
 
     passport.serializeUser((user, done) => {
         if (user.email !== enviroment.ADMIN_USERNAME) {

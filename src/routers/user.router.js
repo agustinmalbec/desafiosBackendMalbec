@@ -11,18 +11,6 @@ userRouter.post('/', passport.authenticate('register', { failureRedirect: '/regi
     res.redirect('/');
 });
 
-/* userRouter.post('/authentication', passport.authenticate('login', { failureRedirect: '/login' }), async (req, res) => {
-    const user = req.user;
-    delete user.password;
-    const token = generateToken(user);
-    res.cookie('token', token, {
-        httpOnly: true,
-        maxAge: 60000,
-    }).redirect('/');
-    //req.session.user = user;
-    //res.redirect('/');
-}); */
-
 userRouter.post('/authentication', async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -40,7 +28,7 @@ userRouter.post('/authentication', async (req, res) => {
         const token = generateToken(user);
         res.cookie('token', token, {
             httpOnly: true,
-            maxAge: 60000,
+            maxAge: 60000000,
         }).redirect('/');
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -48,13 +36,6 @@ userRouter.post('/authentication', async (req, res) => {
 });
 
 userRouter.get('/logout', async (req, res) => {
-    /* req.session.destroy((error) => {
-        if (!error) {
-            res.redirect('/');
-        } else {
-            res.status(500).send('No se pudo finalizar la sesion');
-        }
-    }); */
     res.clearCookie('token').redirect('/login')
 });
 

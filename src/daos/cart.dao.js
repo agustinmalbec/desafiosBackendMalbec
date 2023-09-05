@@ -5,25 +5,28 @@ class CartDAO {
         this.model = cartModel;
     }
 
-    addCart() {
-        const cart = this.model.create();
-        return cart;
+    async addCart(cart) {
+        return await this.model.create(cart);
     }
 
-    getCarts() {
-        return this.model.find();
+    async addProductToCart(cart) {
+        await this.model.save(cart);;
     }
 
-    getSinleCart(id) {
-        return this.model.findOne({ _id: id }).lean();
+    async getCarts() {
+        return await this.model.find();
     }
 
-    deleteCart(id) {
-        return this.model.findByIdAndDelete({ _id: id });
+    async getSinleCart(id) {
+        return await this.model.findOne({ _id: id }).lean();
     }
 
-    updateCart(id, products) {
-        return this.model.findByIdAndUpdate(id, { products }, { new: true });
+    async deleteCart(id) {
+        return await this.model.findByIdAndDelete({ _id: id });
+    }
+
+    async updateCart(id, products) {
+        return await this.model.findByIdAndUpdate(id, { products }, { new: true });
     }
 }
 

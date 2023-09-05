@@ -18,7 +18,6 @@ const userSchema = new mongoose.Schema({
                 ref: 'carts'
             }
         ],
-        default: [],
     },
     role: {
         type: String,

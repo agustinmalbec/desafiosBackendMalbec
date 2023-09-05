@@ -31,9 +31,6 @@ const middlewarePassportJWT = async (req, res, next) => {
         }
 
         if (!usr) {
-            /* res.status(401).send({
-                message: info.messages ? info.messages : info.toString(),
-            }); */
             res.redirect('/login');
         } else {
             req.user = usr;

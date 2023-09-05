@@ -5,29 +5,29 @@ class ProductDAO {
         this.model = productModel;
     }
 
-    getProducts(limit, page, filter, sort) {
-        return this.model.paginate(filter, { lean: true, limit, page, filter, sort: { price: sort } });
+    async getProducts(limit, page, filter, sort) {
+        return await this.model.paginate(filter, { lean: true, limit, page, filter, sort: { price: sort } });
     }
 
-    addProduct(product) {
-        return this.model.create(product);
+    async addProduct(product) {
+        return await this.model.create(product);
     }
 
-    getProductById(id) {
-        return this.model.findOne({ _id: id });
+    async getProductById(id) {
+        return await this.model.findOne({ _id: id });
     }
 
-    getProductByCode(productCode) {
-        return this.model.findOne({ code: productCode });
+    async getProductByCode(productCode) {
+        return await this.model.findOne({ code: productCode });
     }
 
-    updateProduct(id, product) {
-        return this.model.updateOne({ _id: id }, product);
+    async updateProduct(id, product) {
+        return await this.model.updateOne({ _id: id }, product);
 
     }
 
-    deleteProduct(id) {
-        return this.model.deleteOne({ _id: id });
+    async deleteProduct(id) {
+        return await this.model.deleteOne({ _id: id });
     }
 }
 

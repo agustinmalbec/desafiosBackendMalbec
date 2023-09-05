@@ -1,30 +1,32 @@
 import cartDAO from "../daos/cart.dao.js";
-import CartDTO from "../dtos/cart.dto.js";
 
 class CartService {
     constructor() {
         this.service = cartDAO;
     }
 
-    addCart() {
-        const newCart = new CartDTO();
-        return this.service.addCart(newCart);
+    async addCart(cart) {
+        return await this.service.addCart(cart);
     }
 
-    getCarts() {
-        return this.service.getCarts();
+    async addProductToCart(cart) {
+        return await this.service.addProductToCart(cart);
     }
 
-    getSinleCart(id) {
-        return this.service.getSinleCart(id);
+    async getCarts() {
+        return await this.service.getCarts();
     }
 
-    deleteCart(id) {
-        return this.service.deleteCart(id);
+    async getSinleCart(id) {
+        return await this.service.getSinleCart(id);
     }
 
-    updateCart(id, products) {
-        return this.service.updateCart(id, products);
+    async deleteCart(id) {
+        return await this.service.deleteCart(id);
+    }
+
+    async updateCart(id, products) {
+        return await this.service.updateCart(id, products);
     }
 }
 
