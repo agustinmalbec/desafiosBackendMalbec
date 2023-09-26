@@ -15,10 +15,19 @@ export function isGuest(req, res, next) {
 }
 
 export function isAdmin(req, res, next) {
-    if (req.user.role === ' admin') {
+    if (req.user.role === 'admin') {
         next();
     } else {
         alert('No posee permisos de administrador');
+        res.redirect('/')
+    }
+}
+
+export function isUser(req, res, next) {
+    if (req.user.role === 'user') {
+        next();
+    } else {
+        alert('No posee permisos de usuario');
         res.redirect('/')
     }
 }

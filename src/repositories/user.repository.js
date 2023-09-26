@@ -14,6 +14,10 @@ class UserService {
         return await this.service.getUserByEmail(email);
     }
 
+    async getUserByCart(cart) {
+        return await this.service.getUserByCart(cart);
+    }
+
     async getUserById(id) {
         return await this.service.getUserById(id);
     }

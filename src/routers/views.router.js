@@ -15,6 +15,7 @@ viewsRouter.get('/', middlewarePassportJWT, isAuth, async (req, res) => {
         data.category = category;
         let isAdmin = false;
         if (user.role === 'admin') isAdmin = true;
+        data.docs.cart = user.cart._id;
         res.render('index', {
             data: data,
             title: 'Productos',

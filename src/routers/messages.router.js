@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { messagesService } from '../daos/Message.service.js';
+import { isUser } from '../middleware/auth.middleware.js';
 
 const messagesRouter = Router();
 
@@ -12,7 +13,7 @@ messagesRouter.get('/', async (req, res) => {
     }
 });
 
-messagesRouter.post('/', async (req, res) => {
+messagesRouter.post('/', isUser, async (req, res) => {
     const message = req.body;
     try {
         const newMessage = await messagesService.addMessage(message);

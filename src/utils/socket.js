@@ -3,7 +3,6 @@ import express from 'express';
 import http from 'http';
 import productController from '../controllers/product.controller.js';
 import { messagesService } from '../daos/Message.service.js';
-import cartController from '../controllers/cart.controller.js';
 
 export const app = express();
 export const server = http.createServer(app);
@@ -22,7 +21,4 @@ io.on('connection', async (socket) => {
         await messagesService.addMessage(us, message);
         socket.emit('messages', await messagesService.getAllMessages());
     });
-    socket.on('addProduct', async (product) => {
-        await cartController.addProductToCart('64f5ef01135d3d0e6389e153', product);
-    })
 });

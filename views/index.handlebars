@@ -1,6 +1,6 @@
 {{#if user}}
 <h2>Bienvenido {{user.first_name}} a la pagina de productos productos</h2>
-<p>Tus datos son</p>
+<p id="userCart" data-id="{{user.cart._id}}">Tus datos son</p>
 <ul>
 	<li>Nombre: {{user.first_name}}</li>
 	<li>Apellido: {{user.last_name}}</li>
@@ -24,7 +24,7 @@
 			<li class="list-group-item"><b>Categoria:</b> {{this.category}}</li>
 			<li class="list-group-item"><b>Precio:</b> {{this.price}}</li>
 		</ul>
-		<button onclick="addToCart({{this.code}})">Agregar al carrito</button>
+		<button class="add" id="{{this._id}}">Agregar al carrito</button>
 	</div>
 </div>
 {{/each}}

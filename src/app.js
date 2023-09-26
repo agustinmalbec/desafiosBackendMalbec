@@ -17,12 +17,14 @@ import viewsRouter from "./routers/views.router.js";
 import sessionRouter from "./routers/session.router.js";
 
 import MongoStore from 'connect-mongo';
+import { loggerMiddleware } from "./middleware/logger.middleware.js";
 
 // Servidor express
 
 app.use(express.json());
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
+app.use(loggerMiddleware);
 
 /* app.use(session({
     store: MongoStore.create({
@@ -65,5 +67,6 @@ app.use('/api/carts/', cartRouter);
 app.use('/api/chat', messagesRouter);
 app.use('/api/users', userRouter);
 app.use('/api/session', sessionRouter);
+
 
 server.listen(enviroment.PORT, () => console.log('Estoy escuchando el puerto', enviroment.PORT));

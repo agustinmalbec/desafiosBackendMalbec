@@ -9,8 +9,8 @@ class CartService {
         return await this.service.addCart(cart);
     }
 
-    async addProductToCart(cart) {
-        return await this.service.addProductToCart(cart);
+    async addProductToCart(cart, products) {
+        return await this.service.addProductToCart(cart, products);
     }
 
     async getCarts() {

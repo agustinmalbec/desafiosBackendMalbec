@@ -1,4 +1,5 @@
 import productService from "../repositories/product.repository.js";
+import CustomErrors from "../utils/customError.js";
 
 class ProductController {
     constructor() {
@@ -16,7 +17,7 @@ class ProductController {
             }
             return await this.controller.getProducts(limit, page, filter, sort)
         } catch (error) {
-            throw new Error("No se pudo obtener los productos");
+            CustomErrors.createError('Error al obtener los productos', generateErrorProduct({ err }), 'Product error', ErrorCodes.PRODUCT_ERROR);
         }
     }
 
@@ -25,7 +26,7 @@ class ProductController {
             return await this.controller.addProduct(product);
         }
         catch (err) {
-            throw new Error("No se pudo agregar el producto");
+            CustomErrors.createError('Producto ya existe', generateErrorProduct({ err }), 'Product error', ErrorCodes.PRODUCT_ERROR);
         }
     }
 
@@ -34,7 +35,7 @@ class ProductController {
             return await this.controller.getProductById(id);
         }
         catch (err) {
-            throw new Error("No se encontro el producto");
+            CustomErrors.createError('No se consigue el producto por id', generateErrorProduct({ err }), 'Product error', ErrorCodes.PRODUCT_ERROR);
         }
     }
 
@@ -43,19 +44,27 @@ class ProductController {
             return await this.controller.getProductByCode(productCode);
         }
         catch (err) {
-            throw new Error("No se encontro el producto");
+            CustomErrors.createError('No se consigue el producto por codigo', generateErrorProduct({ err }), 'Product error', ErrorCodes.PRODUCT_ERROR);
         }
     }
 
     async updateProduct(id, product) {
         try {
             if (!id) {
-                throw new Error('Missing required fields');
+                CustomErrors.createError('No se obtuvo el id', generateErrorProduct({ err }), 'Product error', ErrorCodes.PRODUCT_ERROR);
             }
             return await this.controller.updateProduct(id, product);
         }
         catch (err) {
-            throw new Error("No se pudo modificar el producto")
+            CustomErrors.createError('No se actualizo el producto', generateErrorProduct({ err }), 'Product error', ErrorCodes.PRODUCT_ERROR);
+        }
+    }
+
+    async deleteProduct(pid) {
+        try {
+            return await this.controller.deleteProduct(pid);
+        } catch (err) {
+            CustomErrors.createError('No se elimino el producto', generateErrorProduct({ err }), 'Product error', ErrorCodes.PRODUCT_ERROR);
         }
     }
 }

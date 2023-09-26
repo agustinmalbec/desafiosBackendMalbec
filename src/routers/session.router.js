@@ -1,6 +1,7 @@
 import { Router } from "express";
 import passport from "passport";
 import { generateToken, middlewarePassportJWT } from "../middleware/jwt.middleware.js";
+import UserDTO from "../dtos/user.dto.js";
 
 const sessionRouter = Router();
 
@@ -16,7 +17,9 @@ sessionRouter.get('/githubcallback', passport.authenticate('github', { failureRe
 });
 
 sessionRouter.get('/current', middlewarePassportJWT, (req, res) => {
-    res.status(200).send({ message: 'Sesion actual: ', user: req.user });
+    const { user } = req.user;
+    delete user.password;
+    res.status(200).send({ message: 'Sesion actual: ', user: new UserDTO(user) });
 });
 
 export default sessionRouter;

@@ -6,9 +6,11 @@ const ticketSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
-    purchase_datetime: new Date(),
+    purchase_datetime: String,
     amount: Number,
     purchase: String,
 });
 
-export const ticketSchemaModel = mongoose.model('tickets', ticketSchema);
+const ticketModel = mongoose.model('tickets', ticketSchema);
+
+export default ticketModel;

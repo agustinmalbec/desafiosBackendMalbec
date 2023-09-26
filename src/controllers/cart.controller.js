@@ -1,5 +1,6 @@
 import cartService from "../repositories/cart.repository.js";
 import productService from "../repositories/product.repository.js";
+import CustomErrors from "../utils/customError.js";
 
 class CartController {
     constructor() {
@@ -11,7 +12,7 @@ class CartController {
             return await this.controller.getCarts();
         }
         catch (err) {
-            throw new Error("No se pudo obtener los carritos");
+            CustomErrors.createError('Problemas al obtener carritos', generateErrorCart({ err }), 'Error cart', ErrorCodes.CART_ERROR);
         }
     }
 
@@ -21,25 +22,24 @@ class CartController {
             return newCart;
         }
         catch (err) {
-            throw new Error("No se pudo agregar el carrito");
+            CustomErrors.createError('Problemas al crear un carrito', generateErrorCart({ err }), 'Error cart', ErrorCodes.CART_ERROR);
         }
     }
 
-    async addProductToCart(cartId, productCode) {
+    async addProductToCart(cartId, productId) {
         try {
             const cart = await this.controller.getSinleCart(cartId);
-            const prod = await productService.getProductByCode(productCode);
-            const find = cart.products.findIndex(e => e.product._id == prod._id);
-            if (find > 0) {
+            const prod = await productService.getProductById(productId);
+            const find = cart.products.findIndex(e => e.product._id == productId);
+            if (find != -1) {
                 cart.products[find].quantity++;
             } else {
                 cart.products.push({ product: prod._id, quantity: 1 });
             }
-            return await this.controller.addProductToCart(cart);
+            return await this.controller.addProductToCart({ _id: cart._id }, { products: cart.products });
         }
         catch (err) {
-            console.log(err)
-            throw new Error("No se pudo agregar el producto");
+            CustomErrors.createError('Problema en agregar producto', generateErrorCart({ err }), 'Error cart', ErrorCodes.CART_ERROR);
         }
     }
 
@@ -48,7 +48,7 @@ class CartController {
             return await this.controller.getSinleCart(cartId);
         }
         catch (err) {
-            throw new Error("No se pudo obtener los carritos");
+            CustomErrors.createError('Problemas al conseguir carrito', generateErrorCart({ err }), 'Error cart', ErrorCodes.CART_ERROR);
         }
     }
 
@@ -57,7 +57,7 @@ class CartController {
             return await this.controller.deleteCart(cartId);
         }
         catch (err) {
-            throw new Error("No se pudo eliminar el producto");
+            CustomErrors.createError('Problema al eliminar el carrito', generateErrorCart({ err }), 'Error cart', ErrorCodes.CART_ERROR);
         }
     }
 
@@ -70,17 +70,17 @@ class CartController {
             return await cart.save();
         }
         catch (err) {
-            throw new Error("No se pudo eliminar el producto");
+            CustomErrors.createError('Problema en eliminar producto del carrito', generateErrorCart({ err }), 'Error cart', ErrorCodes.CART_ERROR);
         }
     }
 
-    /* async updateCart(cartId, products) {
+    async updateCart(cartId, products) {
         try {
             return await this.controller.updateCart(cartId, products);
         } catch (err) {
-            throw new Error('Error al actualizar los productos en el carrito');
+            CustomErrors.createError('Problema en actualizar carrito', generateErrorCart({ err }), 'Error cart', ErrorCodes.CART_ERROR);
         }
-    } */
+    }
 
     async updateProductCart(cartId, productId, quantity) {
         try {
@@ -93,10 +93,10 @@ class CartController {
                 cart.products[productIndex].quantity = quantity;
                 return await cart.save();
             } else {
-                throw new Error('Producto no encontrado en el carrito');
+                CustomErrors.createError('Producto no encontrado', generateErrorCart({ err }), 'Error cart', ErrorCodes.CART_ERROR);
             }
         } catch (err) {
-            throw new Error('No se pudo actualizar la cantidad del producto');
+            CustomErrors.createError('No se pudo actualizar la cantidad del producto', generateErrorCart({ err }), 'Error cart', ErrorCodes.CART_ERROR);
         }
     }
 }

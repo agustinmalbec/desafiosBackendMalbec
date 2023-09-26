@@ -13,6 +13,10 @@ class UserDAO {
         return await this.model.findOne({ email: email });
     }
 
+    async getUserByCart(cart) {
+        return await this.model.findOne({ cart: cart });
+    }
+
     async getUserById(id) {
         return await this.model.findById(id);
     }

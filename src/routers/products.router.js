@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import productController from '../controllers/product.controller.js';
 import { io } from '../utils/socket.js';
+import { generateProduct } from '../utils/generate.js';
+import { isAdmin } from '../middleware/auth.middleware.js';
 
 const productsRouter = Router();
-
-
 
 productsRouter.get('/', async (req, res) => {
     try {
@@ -25,22 +25,24 @@ productsRouter.get('/', async (req, res) => {
             }`;
         res.send({ status: "success", payload: products, prevLink: prevLink, nextLink: nextLink });
     } catch (err) {
+        req.logger.error(`No se obtuvieron los productos`);
         res.status(400).send({ err });
     }
 });
 
-productsRouter.post('/', async (req, res) => {
+productsRouter.post('/', isAdmin, async (req, res) => {
     try {
         let product = req.body;
-        productController.addProduct(product);
+        await productController.addProduct(product);
         res.status(201).send(product);
         io.emit('productsUpdated', await productController.getProducts());
     } catch (err) {
+        req.logger.error(`No se agrego el producto`);
         res.status(400).send({ err });
     }
 });
 
-productsRouter.get('/:pid', async (req, res) => {
+/* productsRouter.get('/:pid', async (req, res) => {
     try {
         const product = await productController.getProductById(req.params.pid)
         if (product) {
@@ -50,29 +52,47 @@ productsRouter.get('/:pid', async (req, res) => {
         }
 
     } catch (err) {
+        console.log(err)
         res.status(400).send({ err });
     }
-});
+}); */
 
-productsRouter.put('/:pid', async (req, res) => {
+productsRouter.put('/:pid', isAdmin, async (req, res) => {
     try {
         let product = req.body;
         await productController.updateProduct(req.params.pid, product);
         return res.send(product);
     } catch (err) {
+        req.logger.error(`No se actualizo el producto`);
         res.status(400).send({ err });
     }
 });
 
-productsRouter.delete('/:pid', async (req, res) => {
+productsRouter.delete('/:pid', isAdmin, async (req, res) => {
     const id = req.params.pid;
     try {
         productController.deleteProduct(id);
         res.send();
         io.emit('productsUpdated', await productController.getProducts());
     } catch (err) {
+        req.logger.error(`No se elimino el producto`);
         res.status(400).send({ err });
     }
+});
+
+productsRouter.get('/mockingproducts', (req, res) => {
+    try {
+        let products = [];
+        for (let i = 0; i < 100; i++) {
+            products.push(generateProduct());
+            productController.addProduct(generateProduct());
+        }
+        res.json(products);
+    } catch (err) {
+        req.logger.error(`No se agregaron los productos`);
+        res.status(500).send(err)
+    }
+
 });
 
 export default productsRouter;

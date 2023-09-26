@@ -9,8 +9,8 @@ class CartDAO {
         return await this.model.create(cart);
     }
 
-    async addProductToCart(cart) {
-        await this.model.save(cart);;
+    async addProductToCart(cartId, products) {
+        await this.model.updateOne(cartId, products);
     }
 
     async getCarts() {
