@@ -80,19 +80,19 @@ productsRouter.delete('/:pid', isAdmin, async (req, res) => {
     }
 });
 
-productsRouter.get('/mockingproducts', (req, res) => {
+productsRouter.get('/mockingproducts', async (req, res) => {
     try {
         let products = [];
         for (let i = 0; i < 100; i++) {
-            products.push(generateProduct());
-            productController.addProduct(generateProduct());
+            let product = generateProduct()
+            products.push(product);
+            await productController.addProduct(product);
         }
         res.json(products);
     } catch (err) {
         req.logger.error(`No se agregaron los productos`);
-        res.status(500).send(err)
+        res.status(500).send(err);
     }
-
 });
 
 export default productsRouter;

@@ -67,6 +67,17 @@ app.use('/api/carts/', cartRouter);
 app.use('/api/chat', messagesRouter);
 app.use('/api/users', userRouter);
 app.use('/api/session', sessionRouter);
-
+app.get("/loggerTest", (req, res) => {
+    try {
+        req.logger.debug('debug msg')
+        req.logger.info('debug msg')
+        req.logger.warning('warning msg')
+        res.send('loggerTest')
+    } catch (err) {
+        req.logger.error('error msg')
+        req.logger.fatal('fatal msg')
+        res.status(500).send('err')
+    }
+});
 
 server.listen(enviroment.PORT, () => console.log('Estoy escuchando el puerto', enviroment.PORT));

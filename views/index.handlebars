@@ -10,6 +10,7 @@
 	{{else}}
 	<li>Sos un usuario normal</li>
 	{{/if}}
+	<a href="/carts/{{user.cart._id}}">Ir al carrito</a>
 	<a href="/api/users/logout" type="submit">Cerrar sesion</a>
 </ul>
 {{else}}

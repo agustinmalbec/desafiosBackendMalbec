@@ -1,1 +1,11 @@
-{"level":"error","message":"No se concreto la compra"}
+{"level":"info","message":"GET - / - [::1] - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 - 2023-09-27T15:44:31.239Z"}
+{"level":"info","message":"GET - / - [::1] - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 - 2023-09-27T15:56:51.313Z"}
+{"level":"info","message":"GET - / - [::1] - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 - 2023-09-27T16:00:48.373Z"}
+{"level":"info","message":"GET - /loggerTest - [::1] - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 - 2023-09-27T16:02:58.546Z"}
+{"level":"debug","message":"debug msg"}
+{"level":"info","message":"debug msg"}
+{"level":"warning","message":"warning msg"}
+{"level":"info","message":"GET - /loggerTest - [::1] - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 - 2023-09-27T16:03:44.500Z"}
+{"level":"debug","message":"debug msg"}
+{"level":"info","message":"debug msg"}
+{"level":"warning","message":"warning msg"}

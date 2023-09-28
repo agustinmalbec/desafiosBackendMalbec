@@ -1,7 +1,7 @@
 import errorCodes from "../utils/error.js";
 
 export default (err, req, res, next) => {
-    req.logger.warn(err, 'Me permite hacer seguimiento de los errores que debo capturar')
+    req.logger.warning(err, 'Me permite hacer seguimiento de los errores que debo capturar')
     switch (err.code) {
 
         case errorCodes.INVALID_TYPE:

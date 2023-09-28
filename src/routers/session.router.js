@@ -19,6 +19,8 @@ sessionRouter.get('/githubcallback', passport.authenticate('github', { failureRe
 sessionRouter.get('/current', middlewarePassportJWT, (req, res) => {
     const { user } = req.user;
     delete user.password;
+    delete user.age;
+    delete user.cart;
     res.status(200).send({ message: 'Sesion actual: ', user: new UserDTO(user) });
 });
 

@@ -11,6 +11,7 @@ cartRouter.post('/', async (req, res) => {
     let cart = req.body;
     try {
         await cartController.addCart(cart);
+        req.logger.info(`Cart con el id creado correctamente`)
         res.status(201).send("Agregado correctamente");
     } catch (err) {
         req.logger.error(`No se creo el carrito`);
@@ -22,7 +23,7 @@ cartRouter.post('/:cid/product/:pid', async (req, res) => {
     try {
         const addProdCart = await cartController.addProductToCart(req.params.cid, req.params.pid);
         if (!addProdCart) {
-            req.logger.warn(`No hay stock del producto`);
+            req.logger.warning(`No hay stock del producto`);
         } else {
             req.logger.info(`Se agrego el producto`);
         }
@@ -126,13 +127,12 @@ cartRouter.put('/:cid/purchase', async (req, res) => {
                 await cartController.updateCart(cart, []);
             }
             if (outOfStock.length > 0) {
+                await cartController.updateCart(cart, []);
                 res.send(outOfStock);
             } else {
                 res.send('Compra realizada con exito');
             }
         }, 100);
-
-
     } catch (err) {
         req.logger.error(`No se concreto la compra`);
         res.status(400).send(err);

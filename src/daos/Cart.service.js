@@ -15,17 +15,13 @@ export default class CartService {
         try {
             const actualCarts = await this.getCarts();
             const cart = { products: [] };
-
             cart.id = actualCarts.length + 1;
-
             actualCarts.push(cart);
             await promises.writeFile(
                 this.path,
                 JSON.stringify(actualCarts)
             );
-
         }
-
         catch (err) {
             console.log("No se pudo agregar el carrito");
         }

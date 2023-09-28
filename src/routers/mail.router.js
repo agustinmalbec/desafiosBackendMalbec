@@ -26,9 +26,9 @@ mailRouter.get('/mail', (req, res) => {
 
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-            console.log(error);
+            req.logger.warn(error);
         }
-        console.log('Email sent: ' + info.response);
+        req.logger.info('Email sent: ' + info.response);
     });
 
     res.send('Sended');

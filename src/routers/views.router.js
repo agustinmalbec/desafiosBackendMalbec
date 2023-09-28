@@ -3,6 +3,7 @@ import productController from "../controllers/product.controller.js";
 import cartController from "../controllers/cart.controller.js";
 import { middlewarePassportJWT } from "../middleware/jwt.middleware.js";
 import { isAuth, isGuest } from "../middleware/auth.middleware.js";
+import { filter } from "express-compression";
 
 const viewsRouter = Router();
 
@@ -16,6 +17,7 @@ viewsRouter.get('/', middlewarePassportJWT, isAuth, async (req, res) => {
         let isAdmin = false;
         if (user.role === 'admin') isAdmin = true;
         data.docs.cart = user.cart._id;
+        data.docs = data.docs.filter((e) => e.stock > 0);
         res.render('index', {
             data: data,
             title: 'Productos',
@@ -36,11 +38,12 @@ viewsRouter.get('/realtimeproducts', async (req, res) => {
 
 });
 
-viewsRouter.get('/carts/:cid', async (req, res) => {
+viewsRouter.get('/carts/:cid', middlewarePassportJWT, async (req, res) => {
     try {
+        const { user } = req.user;
         const cartId = req.params.cid;
         const data = await cartController.getSinleCart(cartId);
-        res.render('carts', { data: data.products });
+        res.render('carts', { data: data.products, user });
     } catch (err) {
         res.status(500).send({ err });
     }
